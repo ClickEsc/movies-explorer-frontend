@@ -1,6 +1,7 @@
+const now = new Date();
+
 // Функция рассчета моего возраста
 function checkMyAge() {
-  const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()); 
   const birthDate = new Date(1991, 9, 27);
 
@@ -31,6 +32,8 @@ function checkMyAge() {
   return age + ' ' + years
 }
 
+const thisYear = now.getFullYear();
+
 module.exports = {
-  checkMyAge
+  checkMyAge, thisYear,
 }
