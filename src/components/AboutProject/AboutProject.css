@@ -12,7 +12,7 @@
   font-size: 22px;
   font-weight: 400;
   line-height: 27px;
-  letter-spacing: -4%;
+  letter-spacing: -.04em;
   border-bottom: 1px solid #000;
 }
 
@@ -47,7 +47,7 @@
   font-size: 20px;
   font-weight: 400;
   line-height: 24.2px;
-  letter-spacing: - 0.4%;
+  letter-spacing: -.04em;
 }
 
 .about-project__subtitle_stages {
