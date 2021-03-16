@@ -1,0 +1,33 @@
+.portfolio {
+  padding: 50px 70px 125px;
+  color: #fff;
+}
+
+.portfolio__title {
+  margin: 0 0 50px;
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #a0a0a0;
+}
+
+.portfolio__list {
+  padding: 0;
+  list-style: none;
+}
+
+.portfolio__list-item {
+  margin: 20px 0 0;
+  padding-bottom: 19px;
+  font-size: 30px;
+  line-height: 50px;
+  letter-spacing: -.04em;
+  border-bottom: 1px solid #e8e8e8;
+  color: #000;
+  display: flex;
+  justify-content: space-between;
+}
+
+.portfolio__list-item:last-of-type {
+  border-bottom: none;
+}
