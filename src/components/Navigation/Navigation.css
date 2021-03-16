@@ -17,6 +17,8 @@
 }
 
 .navigation__button {
+  margin: 2px 0 0;
+  padding: 3px 0 0;
   width: 76px;
   height: 32px;
   font-size: 12px;

@@ -35,5 +35,5 @@ function checkMyAge() {
 const thisYear = now.getFullYear();
 
 module.exports = {
-  checkMyAge, thisYear,
+  checkMyAge, thisYear
 }

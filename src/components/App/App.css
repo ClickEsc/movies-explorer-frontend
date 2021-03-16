@@ -1,6 +1,5 @@
 .app {
     box-sizing: border-box;
-    border: 1px solid blue;
     background-color: #fff;
     font-family: 'Inter', Arial, sans-serif;
     -webkit-font-smoothing: antialiased;

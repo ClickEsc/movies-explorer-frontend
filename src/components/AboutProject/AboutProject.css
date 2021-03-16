@@ -1,7 +1,6 @@
 .about-project {
   padding: 110px 70px;
   background-color: #fff;
-  color: #000;
   display: flex;
   flex-direction: column;
 }
@@ -35,11 +34,11 @@
 }
 
 .about-project__container-item_backend {
-  width: 25%;
+  width: 20%;
 }
 
 .about-project__container-item_frontend {
-  width: 75%;
+  width: 80%;
 }
 
 .about-project__subtitle {

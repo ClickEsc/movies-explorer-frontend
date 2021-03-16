@@ -1,6 +1,6 @@
 .portfolio {
   padding: 50px 70px 125px;
-  color: #fff;
+  background-color: #fff;
 }
 
 .portfolio__title {
@@ -29,5 +29,10 @@
 }
 
 .portfolio__list-item:last-of-type {
+  padding-bottom: 0;
   border-bottom: none;
+}
+
+.portfolio__link-icon {
+  margin: 0 2px 0 0;
 }
