@@ -1,6 +1,6 @@
 .navigation {
   box-sizing: border-box;
-  padding: 18px 70px;
+  padding: 18px 70px 14px;
   width: 100%;
   background-color: #f3c1f8;
   display: flex;
@@ -35,6 +35,7 @@
 
 .navigation__button_signin {
   background-color: #000;
+  border: none;
   border-radius: 3px;
   color: #fff;
 }

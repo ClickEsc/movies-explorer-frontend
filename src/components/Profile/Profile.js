@@ -5,14 +5,14 @@ function Profile() {
   return (
     <section className="profile">
       <p className="profile__greeting">Привет, Виталий!</p>
-      <form className="profile__form">
+      <form noValidate className="profile__form" name="profile-update-form">
         <div className="profile__container profile__container_name">
-          <label className="profile__label profile__label_name" for="profileName">Имя</label>
-          <input className="profile__input profile__input_name" id="profileName" value="Виталий" placeholder="Имя" type="text" />
+          <label className="profile__label profile__label_name" for="profileNameInput">Имя</label>
+          <input className="profile__input profile__input_name" id="profileNameInput" value="Виталий" type="text" />
         </div>
         <div className="profile__container profile__container_email">
-          <label className="profile__label profile__label_email" for="profileEmail">E-mail</label>
-          <input className="profile__input profile__input_email" id="profileEmail" value="pochta@yandex.ru" placeholder="E-mail" type="email" />
+          <label className="profile__label profile__label_email" for="profileEmailInput">E-mail</label>
+          <input className="profile__input profile__input_email" id="profileEmailInput" value="pochta@yandex.ru" type="email" />
         </div>
         <button className="profile__save" type="submit" aria-label="Сохранить изменения">Редактировать</button>
       </form>
