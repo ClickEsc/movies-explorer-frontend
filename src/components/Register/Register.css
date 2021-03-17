@@ -1,0 +1,19 @@
+.register__hint {
+  margin: 16px 0 0 90px;
+  max-width: 396px;
+  font-size: 14px;
+  line-height: 17px;
+  color: #a0a0a0;
+}
+
+.register__link {
+  margin: 0 0 0 6px;
+  font-size: 14px;
+  line-height: 17px;
+  color: #000;
+  text-decoration: none;
+}
+
+.register__link:hover {
+  opacity: .8;
+}
