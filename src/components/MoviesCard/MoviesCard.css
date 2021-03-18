@@ -57,6 +57,12 @@
   background-image: url('../../images/movie-card__button_unfav.svg');
 }
 
+.movies-card__button_delete {
+  width: 21px;
+  height: 21px;
+  background-image: url('../../images/movie-card__button_delete.svg');
+}
+
 .movies-card__title {
   margin: 0;
   max-width: 250px;

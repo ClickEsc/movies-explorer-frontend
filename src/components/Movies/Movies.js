@@ -37,7 +37,7 @@ function Movies(props) {
               <MoviesCard src={movie11} name="Пи Джей Харви: A dog called money" />
               <MoviesCard src={movie12} name="По волнам: Искусство звука в кино" />
             </div>
-            <button className="movies__load-more" type="submit">Ещё</button>
+            <button className="movies__load-more" type="button">Ещё</button>
           </>
       }
     </section>
