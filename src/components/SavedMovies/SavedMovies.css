@@ -1,0 +1,15 @@
+.saved-movies {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 543px;
+  padding: 70px 70px 80px;
+  background-color: #fff;
+}
+
+.saved-movies__container {
+  margin: 0 auto 28px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 360px);
+  column-gap: 30px;
+  row-gap: 59px;
+}

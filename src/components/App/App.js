@@ -8,6 +8,7 @@ import Footer from '../Footer/Footer';
 
 import SearchForm from '../SearchForm/SearchForm';
 import Movies from '../Movies/Movies';
+import SavedMovies from '../SavedMovies/SavedMovies';
 
 import Profile from '../Profile/Profile';
 
@@ -38,6 +39,7 @@ function App() {
           </Route>
           <Route path="/saved-movies">
             <SearchForm />
+            <SavedMovies />
             <Footer />
           </Route>
           <Route path="/profile">
