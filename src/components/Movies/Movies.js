@@ -14,7 +14,7 @@ import movie10 from '../../images/movie-card__image_10.jpg';
 import movie11 from '../../images/movie-card__image_11.jpg';
 import movie12 from '../../images/movie-card__image_12.jpg';
 
-import './Movies.css'
+import './Movies.css';
 
 function Movies(props) {
   return (

@@ -1,5 +1,5 @@
 .footer {
-  padding: 66px 70px 20px;
+  padding: 79px 70px 20px;
   background-color: #fff;
 }
 
@@ -44,5 +44,5 @@
 }
 
 .footer__list-item:last-of-type {
-  margin: 0;
+  margin-right: 0;
 }
