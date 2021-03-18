@@ -6,7 +6,7 @@ import Navigation from '../Navigation/Navigation';
 import Main from '../Main/Main';
 import Footer from '../Footer/Footer';
 
-
+import SearchForm from '../SearchForm/SearchForm';
 import Movies from '../Movies/Movies';
 
 import Profile from '../Profile/Profile';
@@ -32,10 +32,13 @@ function App() {
             <Footer />
           </Route>
           <Route path="/movies">
+            <SearchForm />
             <Movies isLoading={false} />
             <Footer />
           </Route>
           <Route path="/saved-movies">
+            <SearchForm />
+            <Footer />
           </Route>
           <Route path="/profile">
             <Navigation />
