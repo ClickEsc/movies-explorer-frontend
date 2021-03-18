@@ -6,6 +6,9 @@ import Navigation from '../Navigation/Navigation';
 import Main from '../Main/Main';
 import Footer from '../Footer/Footer';
 
+
+import Movies from '../Movies/Movies';
+
 import Profile from '../Profile/Profile';
 
 import Login from '../Login/Login';
@@ -27,6 +30,11 @@ function App() {
             <Navigation />
             <Main />
             <Footer />
+          </Route>
+          <Route path="/movies">
+            <Movies isLoading={false} />
+          </Route>
+          <Route path="/saved-movies">
           </Route>
           <Route path="/profile">
             <Navigation />
