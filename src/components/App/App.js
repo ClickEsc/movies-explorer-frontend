@@ -33,6 +33,7 @@ function App() {
           </Route>
           <Route path="/movies">
             <Movies isLoading={false} />
+            <Footer />
           </Route>
           <Route path="/saved-movies">
           </Route>
