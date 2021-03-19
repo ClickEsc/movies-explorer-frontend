@@ -1,5 +1,6 @@
 .nav-tab {
-  padding: 24px 0;
+  box-sizing: border-box;
+  padding: 24px 70px;
   width: 100%;
   background-color: #000;
   display: flex;
@@ -24,4 +25,9 @@
 
 .nav-tab__link:last-of-type {
   margin-left: 0;
+}
+
+.nav-tab__link:hover {
+  opacity: .8;
+  cursor: pointer;
 }

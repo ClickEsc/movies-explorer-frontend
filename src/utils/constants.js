@@ -34,6 +34,9 @@ function checkMyAge() {
 
 const thisYear = now.getFullYear();
 
+const pathname = window.location.pathname;
+const width = window.innerWidth;
+
 module.exports = {
-  checkMyAge, thisYear
+  checkMyAge, thisYear, pathname, width
 }

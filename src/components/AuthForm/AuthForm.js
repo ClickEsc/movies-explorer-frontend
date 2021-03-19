@@ -1,5 +1,3 @@
-import { Link } from 'react-router-dom';
-import logo from "../../images/navigation__logo.svg";
 import './AuthForm.css';
 
 function AuthForm(props) {
@@ -7,7 +5,6 @@ function AuthForm(props) {
     <div className="auth">
       <form noValidate className={`auth__form auth__form_${props.name}`} name={`${props.name}-form`}>
         <div className="auth__wrap">
-          <Link to="/" className="auth__link"><img className="auth__logo" src={logo} alt="Стилизованный логотип сервиса обзора фильмов 'Movies Explorer'"/></Link>
           <h2 className="auth__title">{`${props.title}`}</h2>
           { props.registerForm ? 
             <div className="auth__container auth__container_name">
@@ -28,7 +25,7 @@ function AuthForm(props) {
           </div>
         </div> 
         <div className="auth__wrap">
-          <button className="auth__save" style={ props.registerForm ? ({ marginTop: '69px' }) : ({ marginTop: '179px' }) } type="submit" aria-label="Сохранить изменения">{`${props.buttonTitle}`}</button>
+          <button className="auth__save" style={ props.registerForm ? ({ marginTop: '91px' }) : ({ marginTop: '179px' }) } type="submit" aria-label="Сохранить изменения">{`${props.buttonTitle}`}</button>
           {props.children}
         </div>
       </form>

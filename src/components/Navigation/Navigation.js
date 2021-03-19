@@ -1,15 +1,23 @@
 import { Link } from 'react-router-dom';
-import logo from "../../images/navigation__logo.svg";
+import { pathname } from '../../utils/constants';
+
 import './Navigation.css';
 
 function Navigation() {
   return (
     <section className="navigation">
-      <Link to="/" className="navigation__logo"><img className="navigation__logo" src={logo} alt="Стилизованный логотип сервиса обзора фильмов 'Movies Explorer'"/></Link>
-      <div className="navigation__container">
-        <button className="navigation__button navigation__button_signup">Регистрация</button>
-        <button className="navigation__button navigation__button_signin">Войти</button>
-      </div>
+      { (pathname === "/movies") &&
+        <div className="navigation__wrap">
+          <Link to="/movies" className="navigation__link navigation__link_active navigation__link_movies">Фильмы</Link>
+          <Link to="/saved-movies" className="navigation__link navigation__link_saved-movies">Сохранённые фильмы</Link>
+        </div> 
+      }
+      { (pathname === "/saved-movies") &&
+        <div className="navigation__wrap">
+          <Link to="/movies" className="navigation__link navigation__link_movies">Фильмы</Link>
+          <Link to="/saved-movies" className="navigation__link navigation__link_active navigation__link_saved-movies">Сохранённые фильмы</Link>
+        </div> 
+      }
     </section>
   );
 }

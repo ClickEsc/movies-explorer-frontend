@@ -1,5 +1,5 @@
 .auth {
-  padding: 70px 0;
+  padding: 0 70px 0;
   background-color: #fff;
   display: flex;
   flex-direction: column;
@@ -7,16 +7,8 @@
   justify-content: space-between;
 }
 
-.auth__link {
-  align-self: flex-start;
-}
-
-.auth__link:hover {
-  opacity: .8;
-}
-
 .auth__title {
-  margin: 37px 0 40px;
+  margin: 40px 0;
   font-size: 24px;
   font-weight: 500;
   line-height: 29px;
@@ -63,6 +55,7 @@
 
 .auth__input:hover {
   opacity: .8;
+  cursor: pointer;
 }
 
 .auth__input:last-of-type {
@@ -103,4 +96,5 @@
 
 .auth__save:hover {
   opacity: .8;
+  cursor: pointer;
 }

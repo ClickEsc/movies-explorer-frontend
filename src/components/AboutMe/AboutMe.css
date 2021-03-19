@@ -69,3 +69,8 @@
 .about-me__link:last-of-type {
   margin: 0;
 }
+
+.about-me__link:hover {
+  opacity: .8;
+  cursor: pointer;
+}

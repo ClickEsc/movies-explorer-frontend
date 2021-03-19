@@ -1,5 +1,6 @@
 .promo {
-  padding: 82px 0 122px;
+  box-sizing: border-box;
+  padding: 82px 70px 122px;
   width: 100%;
   max-height: 524px;
   background-color: #f3c1f8;
