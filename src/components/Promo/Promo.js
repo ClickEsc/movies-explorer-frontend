@@ -5,7 +5,7 @@ function Promo() {
   return (
     <section className="promo">
       <img className="promo__background-image" src={backgroundImage} alt="Стилизованный логотип Яндекс Практикума" />
-      <h1 className="promo__title">Учебный проект студента факультета Веб-разработки.</h1>
+      <h1 className="promo__title">Учебный проект студента факультета Веб&#8209;разработки.</h1>
     </section>
   );
 }

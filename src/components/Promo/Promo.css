@@ -21,7 +21,6 @@
   max-width: 730px;
   font-size: 50px;
   font-weight: 400;
-  font-style: normal;
   line-height: 58px;
   color: #000;
   letter-spacing: -.04em;
@@ -30,4 +29,44 @@
   top: auto;
   left: auto;
   right: auto;
+}
+
+@media screen and (max-width: 750px) {
+  .promo__title {
+    max-width: 500px;
+    font-size: 45px;
+    line-height: 50px;
+  }
+}
+
+@media screen and (max-width: 570px) {
+  .promo__title {
+    max-width: 380px;
+    font-size: 38px;
+    line-height: 42px;
+  }
+}
+
+@media screen and (max-width: 430px) {
+  .promo {
+    padding: 148px 10px 183px;
+    max-height: 574px;
+  }
+
+  .promo__background-image {
+    width: 248px;
+    height: 248px;
+  }
+
+  .promo__title {
+    font-size: 33px;
+    line-height: 40px;
+  }
+}
+
+@media screen and (max-width: 370px) {
+  .promo__title {
+    font-size: 31px;
+    line-height: 39px;
+  }
 }

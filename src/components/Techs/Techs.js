@@ -7,13 +7,13 @@ function Techs() {
       <h3 className="techs__subtitle">7 технологий</h3>
       <p className="techs__text">На курсе веб-разработки мы освоили технологии, которые применили в дипломном проекте.</p>
       <div className="techs__stack">
-        <div className="techs__stack-item">HTML</div>
-        <div className="techs__stack-item">CSS</div>
-        <div className="techs__stack-item">JS</div>
-        <div className="techs__stack-item">React</div>
-        <div className="techs__stack-item">Git</div>
-        <div className="techs__stack-item">Express.js</div>
-        <div className="techs__stack-item">mongoDB</div>
+        <div className="techs__stack-item techs__stack-item_html">HTML</div>
+        <div className="techs__stack-item techs__stack-item_css">CSS</div>
+        <div className="techs__stack-item techs__stack-item_js">JS</div>
+        <div className="techs__stack-item techs__stack-item_react">React</div>
+        <div className="techs__stack-item techs__stack-item_git">Git</div>
+        <div className="techs__stack-item techs__stack-item_express">Express.js</div>
+        <div className="techs__stack-item techs__stack-item_mongo">mongoDB</div>
       </div>
     </section>
   );

@@ -1,5 +1,7 @@
 .footer {
-  padding: 70px 70px 20px;
+  box-sizing: border-box;
+  padding: 79px 70px 20px;
+  width: 100%;
   background-color: #fff;
 }
 
@@ -16,6 +18,7 @@
 .footer__container {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
 }
 
 .footer__copyright {
@@ -26,6 +29,7 @@
 }
 
 .footer__list {
+  margin: 20px 0 0;
   padding: 0;
   list-style: none;
   display: flex;
@@ -50,4 +54,58 @@
 .footer__link:hover {
   opacity: .8;
   cursor: pointer;
+}
+
+@media screen and (max-width: 850px) {
+  .footer {
+    padding: 79px 23px 20px 37px;
+  }
+
+  .footer__copyright {
+    margin-top: 20px;
+  }
+
+  .footer__list-item {
+    margin: 0 20px 20px 0;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .footer {
+    padding: 79px 10px 10px;
+  }
+
+  .footer__description {
+    padding-bottom: 21px;
+    font-size: 12px;
+    line-height: 15px;
+  }
+
+  .footer__container {
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+
+  .footer__copyright {
+    margin-top: 32px;
+    font-size: 12px;
+    line-height: 15px;
+    color: #a0a0a0;
+  }
+
+  .footer__list {
+    margin-top: 31px;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .footer__list-item {
+    margin: 0 0 12px;
+    font-size: 12px;
+    line-height: 15px;
+  }
+
+  .footer__list-item:last-of-type {
+    margin-bottom: 0;
+  }
 }
