@@ -1,5 +1,6 @@
 import React from 'react';
 import { Route, Switch, useHistory } from 'react-router-dom';
+import { useMediaQuery } from 'react-responsive';
 
 import Header from '../Header/Header';
 import Main from '../Main/Main';
@@ -16,15 +17,40 @@ import Register from '../Register/Register';
 
 import NotFound from '../NotFound/NotFound';
 
+import PopupMenu from '../PopupMenu/PopupMenu';
+
 import './App.css';
+import { pathname } from '../../utils/constants';
+
 
 function App() {
   
   const history = useHistory();
 
+  const isMobile = useMediaQuery({ query: `(max-width: 850px)` });
+
+  const isSuperMobile = useMediaQuery({ query: `(max-width: 500px)` });
+
+  console.log(isSuperMobile);
+
+  const [isPopupMenuOpen, setPopupMenuOpen] = React.useState(false);
+
+  function handleMenuClick() {
+    setPopupMenuOpen(true);
+  }
+
+  /*style={(pathname === "/signin" || pathname === "/signup") && isMobile
+          ? {transform: "translate(0, 25.8%)"}
+          : {display: "block"}}*/
+
   return (
     <div className="app">
-      <div className="app__container">
+      <div
+        className="app__container"
+        style={(pathname === "/signin" || pathname === "/signup") && isMobile
+          ? {display: "flex", flexDirection: "column", alignItems: "center", justifyContent:"center"}
+          : {display: "block"}}
+      >
         <Switch>
           <Route exact path="/">
             <Header />
@@ -32,33 +58,38 @@ function App() {
             <Footer />
           </Route>
           <Route path="/movies">
-            <Header />
-            <SearchForm />
-            <Movies isLoading={false} />
-            <Footer />
+            {!isPopupMenuOpen ?
+              <>
+                <Header isMobile={isMobile} isSuperMobile={isSuperMobile} onMenuClick={handleMenuClick} />
+                <SearchForm />
+                <Movies isLoading={false} isMobile={isMobile} isSuperMobile={isSuperMobile} />
+                <Footer />
+              </>
+            : ''}
           </Route>
           <Route path="/saved-movies">
-            <Header />
+            <Header isMobile={isMobile} isSuperMobile={isSuperMobile} onMenuClick={handleMenuClick} />
             <SearchForm />
-            <SavedMovies />
+            <SavedMovies isLoading={false} isMobile={isMobile} isSuperMobile={isSuperMobile} />
             <Footer />
           </Route>
           <Route path="/profile">
-            <Header />
+            <Header isMobile={isMobile} isSuperMobile={isSuperMobile} onMenuClick={handleMenuClick} />
             <Profile />
           </Route>
           <Route path="/signin">
-            <Header />
-            <Login />
+            <Header isMobile={isMobile} isSuperMobile={isSuperMobile} onMenuClick={handleMenuClick} />
+            <Login isMobile={isMobile} isSuperMobile={isSuperMobile} />
           </Route>
           <Route path="/signup">
-            <Header />
-            <Register />
+            <Header isMobile={isMobile} isSuperMobile={isSuperMobile} onMenuClick={handleMenuClick} />
+            <Register isMobile={isMobile} isSuperMobile={isSuperMobile} />
           </Route>
           <Route path="/*">
             <NotFound history={history} />
           </Route>
         </Switch>
+        <PopupMenu isOpen={isPopupMenuOpen} />
       </div>
     </div>
   );

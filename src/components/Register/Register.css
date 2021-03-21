@@ -1,9 +1,10 @@
 .register__hint {
-  margin: 16px 0 0 90px;
+  margin: 16px 0 0;
   max-width: 396px;
   font-size: 14px;
   line-height: 17px;
   color: #a0a0a0;
+  text-align: center;
 }
 
 .register__link {
@@ -17,4 +18,17 @@
 .register__link:hover {
   opacity: .8;
   cursor: pointer;
+}
+
+@media screen and (max-width: 500px) {
+  .register__hint {
+    font-size: 12px;
+    line-height: 15px;
+  }
+  
+  .register__link {
+    margin: 0 0 0 7px;
+    font-size: 12px;
+    line-height: 15px;
+  }
 }

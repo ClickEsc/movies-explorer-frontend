@@ -4,12 +4,19 @@
   min-height: 543px;
   padding: 70px 70px 80px;
   background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.saved-movies__container {
-  margin: 0 auto 28px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 360px);
-  column-gap: 30px;
-  row-gap: 59px;
+@media screen and (max-width: 850px) {
+  .saved-movies {
+    padding: 70px 30px 160px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .saved-movies {
+    padding: 70px 10px 80px;
+  }
 }

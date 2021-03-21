@@ -1,9 +1,24 @@
+import { pathname } from '../../utils/constants';
 import './AuthForm.css';
 
 function AuthForm(props) {
+
+  function setFormStyle() {
+    if ((pathname === "/signin") && (props.isMobile)) {
+      return {height: "300px"}
+    } else if ((pathname === "/signup") && (props.isSuperMobile)) {
+      return {height: "84vh"}
+    } else if ((pathname === "/signin") && (props.isSuperMobile)) {
+      return {height: "85vh"}
+    }
+  }
+
   return (
     <div className="auth">
-      <form noValidate className={`auth__form auth__form_${props.name}`} name={`${props.name}-form`}>
+      <form
+        noValidate
+        className={`auth__form auth__form_${props.name}`} name={`${props.name}-form`}
+        style={setFormStyle()}>
         <div className="auth__wrap">
           <h2 className="auth__title">{`${props.title}`}</h2>
           { props.registerForm ? 
@@ -25,7 +40,7 @@ function AuthForm(props) {
           </div>
         </div> 
         <div className="auth__wrap">
-          <button className="auth__save" style={ props.registerForm ? ({ marginTop: '91px' }) : ({ marginTop: '179px' }) } type="submit" aria-label="Сохранить изменения">{`${props.buttonTitle}`}</button>
+          <button className="auth__save" type="submit" aria-label="Сохранить изменения">{`${props.buttonTitle}`}</button>
           {props.children}
         </div>
       </form>

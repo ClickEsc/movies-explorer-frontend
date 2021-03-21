@@ -1,31 +1,38 @@
 import { Route, Link } from 'react-router-dom';
-import logo from "../../images/navigation__logo.svg";
-import icon from "../../images/header__profile-icon.svg";
+import logo from "../../images/header__logo.svg";
+import menu from "../../images/mobile-menu-icon.svg"
 import { pathname } from '../../utils/constants';
 import Navigation from '../Navigation/Navigation';
+import AccountLink from '../AccountLink/AccountLink';
 import './Header.css';
 
-function Header() {
+function Header(props) {
 
     function setHeaderStyle() {
       if (pathname === "/") {
         return {paddingBottom: "25px", backgroundColor: "#f3c1f8"}
-      } else if (pathname === "/signin" || pathname === "/signup" ) {
-        return {padding: "70px 0 6px", backgroundColor: "#fff", justifyContent: "center"}
+      } else if ((pathname === "/signin" || pathname === "/signup")) {
+        if (props.isSuperMobile) {
+          return {padding: "56px 0 6px", backgroundColor: "#fff", textAlign: "center"}
+        } else {
+          return {padding: "56px 0 6px", backgroundColor: "#fff", justifyContent: "flex-start"}
+        }
       } else {
         return {paddingBottom: "18px", backgroundColor: "#fff"}
       }
     }
 
     function setHeaderLinkStyle() {
-      if (pathname === "/signin" || pathname === "/signup" ) {
-        return {width: "396px"}
+      if ((pathname === "/signin" || pathname === "/signup")) {
+        return {width: "396px", margin: "0 auto"}
+      } else if ((pathname === "/signin" || pathname === "/signup") && (props.isSuperMobile)) {
+        return {width: "300px", margin: "0 auto", textAlign: "center"}
       } else {
-        return {width: "max-content"}
+        if (pathname !== "/") {
+          return {width: "max-content"}
+        }
       }
     }
-
-
 
     return (
       <header className="header" style={setHeaderStyle()}>
@@ -39,31 +46,28 @@ function Header() {
           </div>
         </Route>
         <Route path="/movies">
-          <Navigation />
-          <Link to="/profile" className="header__link header__link_profile">
-            Аккаунт
-            <div className="header__wrap header__wrap_movies">
-              <img className="header__profile-icon" src={icon} alt="Стилизованная иконка профиля" />
-            </div>
-          </Link>
+          {!props.isMobile &&
+            <Navigation />
+          }
+          { !props.isMobile
+            ? <AccountLink />
+            : <img onClick={props.onMenuClick} className="header__menu-icon" src={menu} alt="Стилизованная иконка меню" />}
         </Route>
         <Route path="/saved-movies">
-          <Navigation />
-          <Link to="/profile" className="header__link header__link_profile">
-            Аккаунт
-            <div className="header__wrap header__wrap_saved-movies">
-              <img className="header__profile-icon" src={icon} alt="Стилизованная иконка профиля" />
-            </div>
-          </Link>
+          {!props.isMobile &&
+            <Navigation />
+          }
+          { !props.isMobile
+            ? <AccountLink />
+            : <img onClick={props.onMenuClick} className="header__menu-icon" src={menu} alt="Стилизованная иконка меню" />}
         </Route>
         <Route path="/profile">
-          <Navigation />
-          <Link to="/profile" className="header__link header__link_profile">
-            Аккаунт
-            <div className="header__wrap header__wrap_saved-movies">
-              <img className="header__profile-icon" src={icon} alt="Стилизованная иконка профиля" />
-            </div>
-          </Link>
+          {!props.isMobile &&
+            <Navigation />
+          }
+          { !props.isMobile
+            ? <AccountLink />
+            : <img onClick={props.onMenuClick} className="header__menu-icon" src={menu} alt="Стилизованная иконка меню" />}
         </Route>
       </header>
     );

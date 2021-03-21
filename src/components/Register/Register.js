@@ -2,9 +2,9 @@ import { Link } from 'react-router-dom';
 import AuthForm from "../AuthForm/AuthForm";
 import './Register.css';
 
-function Register() {
+function Register(props) {
   return (
-    <AuthForm registerForm={true} name="signup" title="Добро пожаловать!" buttonTitle="Зарегистрироваться" children={
+    <AuthForm isSuperMobile={props.isSuperMobile} registerForm={true} name="signup" title="Добро пожаловать!" buttonTitle="Зарегистрироваться" children={
       <>
         <p className="register__hint">Уже зарегистрированы?<Link to="/signin" className="register__link">Войти</Link></p>
       </>
