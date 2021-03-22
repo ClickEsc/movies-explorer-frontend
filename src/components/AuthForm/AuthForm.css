@@ -1,0 +1,158 @@
+.auth {
+  box-sizing: border-box;
+  padding: 0 70px 0;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.auth__form {
+  min-height: 650px;
+  height: 74.5vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.auth__container {
+  margin: 0 0 20px;
+  width: 396px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: relative;
+}
+
+.auth__container:last-of-type {
+  margin-bottom: 0;
+}
+
+.auth__title {
+  margin: 40px 0;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 29px;
+}
+
+.auth__label {
+  margin: 0 0 10px;
+  font-size: 10px;
+  line-height: 12px;
+  color: #a0a0a0;
+}
+
+.auth__input {
+  box-sizing: border-box;
+  padding: 0 15px;
+  width: 396px;
+  height: 46px;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 15.73px;
+  background-color: #f9f9f9;
+  border: none;
+  border-radius: 8px;
+}
+
+.auth__input:hover {
+  opacity: .8;
+  cursor: pointer;
+}
+
+.auth__input:last-of-type {
+  margin: 0;
+}
+
+.auth__input_password {
+  letter-spacing: .03em;
+  color: #ff4062;
+}
+
+.auth__error-text {
+  display: none;
+  margin: 0;
+  position: absolute;
+  top: 79px;
+  left: 0;
+  color: #ff4062;
+  font-size: 10px;
+  line-height: 12px;
+}
+
+.auth__error-text_visible {
+  display: block;
+}
+
+.auth__save {
+  padding: 13px 0 15px;
+  width: 396px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 17px;
+  color: #fff;
+  background-color: #000;
+  border: none;
+  border-radius: 3px;
+}
+
+.auth__save:hover {
+  opacity: .8;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 850px) {
+  .auth__wrap {
+    width: 100%;
+  }
+
+  .auth__container {
+    width: 100%;
+  }
+
+  .auth__input {
+    width: 100%;
+  }
+
+  .auth__save {
+    padding: 15.5px 0 15.5px;
+    font-size: 12px;
+    line-height: 14px;
+    border: none;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .auth {
+    padding: 0 30px 30px;
+  }
+
+  .auth__title {
+    margin: 54px 0 80px;
+    text-align: center;
+  }
+
+  .auth__form {
+    width: 260px;
+  }
+
+  .auth__wrap {
+    width: 100%;
+  }
+
+  .auth__container {
+    width: 100%;
+  }
+
+  .auth__input {
+    width: 100%;
+  }
+
+  .auth__save {
+    padding: 15.5px 0 15.5px;
+    width: 260px;
+    font-size: 12px;
+    line-height: 14px;
+    border: none;
+  }
+}

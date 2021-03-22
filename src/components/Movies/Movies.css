@@ -1,0 +1,40 @@
+.movies {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 70px 70px 80px;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.movies__load-more {
+  margin: 50px 0 0;
+  width: 100%;
+  height: 36px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 15px;
+  color: #000;
+  text-align: center;
+  background-color: #f9f9f9;
+  border: none;
+  border-radius: 6px;
+}
+
+.movies__load-more:hover {
+  opacity: .8;
+  cursor: pointer;
+}
+
+@media screen and (max-width: 850px) {
+  .movies {
+    padding: 70px 30px 80px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .movies {
+    padding: 40px 10px 80px;
+  }
+}

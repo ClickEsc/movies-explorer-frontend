@@ -1,0 +1,32 @@
+.navigation {
+  width: 100%;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navigation__container {
+  margin: 0 0 0 58px;
+}
+
+.navigation__link {
+  margin: 0 16px 0 0;
+  font-size: 13px;
+  line-height: 18px;
+  color: #000;
+  text-decoration: none;
+}
+
+.navigation__link_active {
+  font-weight: 500;
+}
+
+.navigation__link:last-of-type {
+  margin: 0;
+}
+
+.navigation__link:hover {
+  opacity: .8;
+  cursor: pointer;
+}

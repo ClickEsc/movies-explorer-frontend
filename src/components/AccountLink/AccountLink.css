@@ -1,0 +1,46 @@
+.account-link {
+  margin: 0;
+  width: 100px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 16px;
+  color: #000;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.account-link:hover {
+  opacity: .8;
+  cursor: pointer;
+}
+
+.account-link__container {
+  margin: 0 0 0 13px;
+  width: 30px;
+  height: 30px;
+  background-color: #f9f9f9;
+  border: none;
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.account-link__icon {
+  width: 12px;
+  height: 12px;
+}
+
+@media screen and (max-width: 850px) {
+  .account-link {
+    margin: 0 auto;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .account-link__icon {
+    width: 13px;
+    height: 13px;
+  }
+}
