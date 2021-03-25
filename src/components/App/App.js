@@ -19,6 +19,9 @@ import NotFound from '../NotFound/NotFound';
 
 import PopupMenu from '../PopupMenu/PopupMenu';
 
+import { moviesApi } from '../../utils/MoviesApi';
+import { mainApi } from '../../utils/MainApi';
+
 import './App.css';
 import { pathname } from '../../utils/constants';
 
@@ -30,18 +33,30 @@ function App() {
   const isMobile = useMediaQuery({ query: `(max-width: 850px)` });
 
   const isSuperMobile = useMediaQuery({ query: `(max-width: 500px)` });
-
-  console.log(isSuperMobile);
-
+  
+  const [initialMovies, setInitialMovies] = React.useState([]);
+  const [savedMovies, setSavedMovies] = React.useState([]);
   const [isPopupMenuOpen, setPopupMenuOpen] = React.useState(false);
 
   function handleMenuClick() {
     setPopupMenuOpen(true);
   }
 
-  /*style={(pathname === "/signin" || pathname === "/signup") && isMobile
-          ? {transform: "translate(0, 25.8%)"}
-          : {display: "block"}}*/
+  // Фильмы
+  React.useEffect(() => {
+    moviesApi.getInitialMovies()
+      .then((movies) => {
+        setInitialMovies(movies);
+      })
+  }, []);
+
+  React.useEffect(() => {
+    mainApi.getSavedMovies()
+      .then((movies) => {
+        console.log(movies);
+        setSavedMovies(movies);
+      })
+  }, []);
 
   return (
     <div className="app">
@@ -62,7 +77,7 @@ function App() {
               <>
                 <Header isMobile={isMobile} isSuperMobile={isSuperMobile} onMenuClick={handleMenuClick} />
                 <SearchForm />
-                <Movies isLoading={false} isMobile={isMobile} isSuperMobile={isSuperMobile} />
+                <Movies movies={initialMovies} isLoading={false} isMobile={isMobile} isSuperMobile={isSuperMobile} />
                 <Footer />
               </>
             : ''}
@@ -70,7 +85,7 @@ function App() {
           <Route path="/saved-movies">
             <Header isMobile={isMobile} isSuperMobile={isSuperMobile} onMenuClick={handleMenuClick} />
             <SearchForm />
-            <SavedMovies isLoading={false} isMobile={isMobile} isSuperMobile={isSuperMobile} />
+            <SavedMovies movies={savedMovies} isLoading={false} isMobile={isMobile} isSuperMobile={isSuperMobile} />
             <Footer />
           </Route>
           <Route path="/profile">

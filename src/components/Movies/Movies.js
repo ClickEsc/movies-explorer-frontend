@@ -8,7 +8,7 @@ function Movies(props) {
     <section className="movies">
       {props.isLoading
         ? <Preloader />
-        : <MoviesCardList isMobile={props.isMobile} isSuperMobile={props.isSuperMobile} />
+        : <MoviesCardList movies={props.movies} isMobile={props.isMobile} isSuperMobile={props.isSuperMobile} />
       }
       {props.isLoading
         ? "" 
