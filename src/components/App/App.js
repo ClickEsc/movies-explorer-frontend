@@ -1,32 +1,21 @@
 import React from 'react';
 import { Route, Switch, Redirect, useHistory, useLocation } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
-
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
-
+import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
 import Footer from '../Footer/Footer';
-
-import SearchForm from '../SearchForm/SearchForm';
 import Movies from '../Movies/Movies';
 import SavedMovies from '../SavedMovies/SavedMovies';
-
 import Profile from '../Profile/Profile';
-
 import Login from '../Login/Login';
 import Register from '../Register/Register';
-
 import NotFound from '../NotFound/NotFound';
-
 import PopupMenu from '../PopupMenu/PopupMenu';
-
 import { moviesApi } from '../../utils/MoviesApi';
 import { mainApi } from '../../utils/MainApi';
-
 import './App.css';
-import { pathname } from '../../utils/constants';
-
 
 function App() {
   
@@ -53,13 +42,13 @@ function App() {
     setPopupMenuOpen(false);
   }
 
-  /*// Фильмы
+  // Фильмы
   React.useEffect(() => {
     moviesApi.getInitialMovies()
       .then((movies) => {
         setInitialMovies(movies);
       })
-  }, []);
+  }, [isLoggedIn]);
 
   React.useEffect(() => {
     mainApi.getSavedMovies()
@@ -67,8 +56,9 @@ function App() {
         console.log(movies);
         setSavedMovies(movies);
       })
-  }, []);*/
-
+  }, [isLoggedIn]);
+  
+  // Проверка токена и вход
   function handleLogIn() {
     const token = localStorage.getItem('token');
     if (token) {
@@ -144,48 +134,49 @@ function App() {
       <div className="app">
         <div
           className="app__container"
-          style={(pathname === "/signin" || pathname === "/signup") && isMobile
+          style={(path === "/signin" || path === "/signup") && isMobile
             ? {display: "flex", flexDirection: "column", alignItems: "center", justifyContent:"center"}
             : {display: "block"}}
         >
+          <Header loggedIn={isLoggedIn} isMobile={isMobile} isSuperMobile={isSuperMobile} onMenuClick={handleMenuClick} />
           <Switch>
             <Route exact path="/">
-              <Header isLoggedIn={isLoggedIn} isMobile={isMobile} onMenuClick={handleMenuClick} />
               <Main />
-              <Footer />
-            </Route>
-            <Route path="/movies">
-              {!isPopupMenuOpen ?
-                <>
-                  <Header isMobile={isMobile} isSuperMobile={isSuperMobile} onMenuClick={handleMenuClick} />
-                  <SearchForm />
-                  <Movies movies={initialMovies} isLoading={false} isMobile={isMobile} isSuperMobile={isSuperMobile} />
-                  <Footer />
-                </>
-              : ''}
-            </Route>
-            <Route path="/saved-movies">
-              <Header isMobile={isMobile} isSuperMobile={isSuperMobile} onMenuClick={handleMenuClick} />
-              <SearchForm />
-              <SavedMovies movies={savedMovies} isLoading={false} isMobile={isMobile} isSuperMobile={isSuperMobile} />
-              <Footer />
-            </Route>
-            <Route path="/profile">
-              <Header isMobile={isMobile} isSuperMobile={isSuperMobile} onMenuClick={handleMenuClick} />
-              <Profile onProfileUpdate={updateUserInfo} />
             </Route>
             <Route path="/signin">
-              <Header isMobile={isMobile} isSuperMobile={isSuperMobile} onMenuClick={handleMenuClick} />
               <Login onLogin={authorizeUser} isMobile={isMobile} isSuperMobile={isSuperMobile} />
             </Route>
             <Route path="/signup">
-              <Header isMobile={isMobile} isSuperMobile={isSuperMobile} onMenuClick={handleMenuClick} />
               <Register onRegister={registerUser} isMobile={isMobile} isSuperMobile={isSuperMobile} />
             </Route>
+            <ProtectedRoute
+              path="/movies"
+              loggedIn={isLoggedIn}
+              component={Movies}
+              movies={initialMovies}
+              isLoading={false}
+              isMobile={isMobile}
+              isSuperMobile={isSuperMobile} />
+            <ProtectedRoute
+              path="/saved-movies"
+              loggedIn={isLoggedIn}
+              component={SavedMovies}
+              movies={savedMovies}
+              isLoading={false}
+              isMobile={isMobile}
+              isSuperMobile={isSuperMobile} />
+            <ProtectedRoute
+              path="/profile"
+              loggedIn={isLoggedIn}
+              component={Profile}
+              onProfileUpdate={updateUserInfo}
+              isMobile={isMobile}
+              isSuperMobile={isSuperMobile} />
             <Route path="/*">
               <NotFound history={history} />
             </Route>
           </Switch>
+          <Footer />
           <PopupMenu isOpen={isPopupMenuOpen} onClose={closeAllPopups} />
         </div>
       </div>
