@@ -1,6 +1,8 @@
 import React from 'react';
-import { Route, Switch, useHistory } from 'react-router-dom';
+import { Route, Switch, Redirect, useHistory, useLocation } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
+
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
 import Header from '../Header/Header';
 import Main from '../Main/Main';
@@ -30,11 +32,15 @@ function App() {
   
   const history = useHistory();
 
+  const location = useLocation();
+  const path = location.pathname;
+
   const isMobile = useMediaQuery({ query: `(max-width: 850px)` });
 
   const isSuperMobile = useMediaQuery({ query: `(max-width: 500px)` });
   
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+  const [currentUser, setCurrentUser] = React.useState({ name: '', email: ''});
   const [initialMovies, setInitialMovies] = React.useState([]);
   const [savedMovies, setSavedMovies] = React.useState([]);
   const [isPopupMenuOpen, setPopupMenuOpen] = React.useState(false);
@@ -70,7 +76,7 @@ function App() {
       mainApi.getToken(token)
         .then((res) => {
           if (res) {
-            /*setCurrentUser(res.data);*/
+            setCurrentUser(res);
             setIsLoggedIn(true);
             history.push('/');
           }
@@ -78,6 +84,14 @@ function App() {
         .catch(err => console.log(`Ошибка при запросе токена: ${err.message}`));
     }
   }
+
+  // Cохранение токена для повторного входа пользователя без дополнительной авторизации
+  React.useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      handleLogIn();
+    }
+  }, []);
 
   // Регистрация пользователя
   function registerUser(name, email, password) {
@@ -106,55 +120,76 @@ function App() {
       .catch(err => console.log(`Ошибка при попытке входа пользователя: ${err.message}`));
   }
 
+  React.useEffect(() => {
+    if (isLoggedIn) {
+      mainApi.getUserInfo()
+        .then((res) => {
+          setCurrentUser(res);
+        })
+        .catch(err => console.log(`Ошибка при обращении за информацией о пользователе: ${err.message}`))
+    }
+  }, [isLoggedIn]);
+
+  // Изменение информации о пользователе
+  function updateUserInfo(currentUser) {
+    mainApi.editUserInfo(currentUser)
+      .then((res) => {
+        setCurrentUser(res);
+    })
+    .catch(err => console.log(`Ошибка при редактировании информации о пользователе: ${err.message}`))
+  }
+
   return (
-    <div className="app">
-      <div
-        className="app__container"
-        style={(pathname === "/signin" || pathname === "/signup") && isMobile
-          ? {display: "flex", flexDirection: "column", alignItems: "center", justifyContent:"center"}
-          : {display: "block"}}
-      >
-        <Switch>
-          <Route exact path="/">
-            <Header isLoggedIn={isLoggedIn} isMobile={isMobile} onMenuClick={handleMenuClick} />
-            <Main />
-            <Footer />
-          </Route>
-          <Route path="/movies">
-            {!isPopupMenuOpen ?
-              <>
-                <Header isMobile={isMobile} isSuperMobile={isSuperMobile} onMenuClick={handleMenuClick} />
-                <SearchForm />
-                <Movies movies={initialMovies} isLoading={false} isMobile={isMobile} isSuperMobile={isSuperMobile} />
-                <Footer />
-              </>
-            : ''}
-          </Route>
-          <Route path="/saved-movies">
-            <Header isMobile={isMobile} isSuperMobile={isSuperMobile} onMenuClick={handleMenuClick} />
-            <SearchForm />
-            <SavedMovies movies={savedMovies} isLoading={false} isMobile={isMobile} isSuperMobile={isSuperMobile} />
-            <Footer />
-          </Route>
-          <Route path="/profile">
-            <Header isMobile={isMobile} isSuperMobile={isSuperMobile} onMenuClick={handleMenuClick} />
-            <Profile />
-          </Route>
-          <Route path="/signin">
-            <Header isMobile={isMobile} isSuperMobile={isSuperMobile} onMenuClick={handleMenuClick} />
-            <Login onLogin={authorizeUser} isMobile={isMobile} isSuperMobile={isSuperMobile} />
-          </Route>
-          <Route path="/signup">
-            <Header isMobile={isMobile} isSuperMobile={isSuperMobile} onMenuClick={handleMenuClick} />
-            <Register onRegister={registerUser} isMobile={isMobile} isSuperMobile={isSuperMobile} />
-          </Route>
-          <Route path="/*">
-            <NotFound history={history} />
-          </Route>
-        </Switch>
-        <PopupMenu isOpen={isPopupMenuOpen} onClose={closeAllPopups} />
+    <CurrentUserContext.Provider value={currentUser}>
+      <div className="app">
+        <div
+          className="app__container"
+          style={(pathname === "/signin" || pathname === "/signup") && isMobile
+            ? {display: "flex", flexDirection: "column", alignItems: "center", justifyContent:"center"}
+            : {display: "block"}}
+        >
+          <Switch>
+            <Route exact path="/">
+              <Header isLoggedIn={isLoggedIn} isMobile={isMobile} onMenuClick={handleMenuClick} />
+              <Main />
+              <Footer />
+            </Route>
+            <Route path="/movies">
+              {!isPopupMenuOpen ?
+                <>
+                  <Header isMobile={isMobile} isSuperMobile={isSuperMobile} onMenuClick={handleMenuClick} />
+                  <SearchForm />
+                  <Movies movies={initialMovies} isLoading={false} isMobile={isMobile} isSuperMobile={isSuperMobile} />
+                  <Footer />
+                </>
+              : ''}
+            </Route>
+            <Route path="/saved-movies">
+              <Header isMobile={isMobile} isSuperMobile={isSuperMobile} onMenuClick={handleMenuClick} />
+              <SearchForm />
+              <SavedMovies movies={savedMovies} isLoading={false} isMobile={isMobile} isSuperMobile={isSuperMobile} />
+              <Footer />
+            </Route>
+            <Route path="/profile">
+              <Header isMobile={isMobile} isSuperMobile={isSuperMobile} onMenuClick={handleMenuClick} />
+              <Profile onProfileUpdate={updateUserInfo} />
+            </Route>
+            <Route path="/signin">
+              <Header isMobile={isMobile} isSuperMobile={isSuperMobile} onMenuClick={handleMenuClick} />
+              <Login onLogin={authorizeUser} isMobile={isMobile} isSuperMobile={isSuperMobile} />
+            </Route>
+            <Route path="/signup">
+              <Header isMobile={isMobile} isSuperMobile={isSuperMobile} onMenuClick={handleMenuClick} />
+              <Register onRegister={registerUser} isMobile={isMobile} isSuperMobile={isSuperMobile} />
+            </Route>
+            <Route path="/*">
+              <NotFound history={history} />
+            </Route>
+          </Switch>
+          <PopupMenu isOpen={isPopupMenuOpen} onClose={closeAllPopups} />
+        </div>
       </div>
-    </div>
+    </CurrentUserContext.Provider>
   );
 }
 

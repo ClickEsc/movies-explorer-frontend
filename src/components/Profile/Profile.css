@@ -59,6 +59,11 @@
   color: #000;
   background-color: transparent;
   border: none;
+  outline: none;
+}
+
+.profile__save_blocked {
+  color: #a0a0a0;
 }
 
 .profile__link {
