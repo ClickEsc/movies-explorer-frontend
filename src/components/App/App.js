@@ -110,6 +110,11 @@ function App() {
       .catch(err => console.log(`Ошибка при попытке входа пользователя: ${err.message}`));
   }
 
+  function signOut() {
+    localStorage.removeItem('token');
+    history.push('/');
+  }
+
   React.useEffect(() => {
     if (isLoggedIn) {
       mainApi.getUserInfo()
@@ -170,6 +175,7 @@ function App() {
               loggedIn={isLoggedIn}
               component={Profile}
               onProfileUpdate={updateUserInfo}
+              onSignOut={signOut}
               isMobile={isMobile}
               isSuperMobile={isSuperMobile} />
             <Route path="/*">

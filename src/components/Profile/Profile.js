@@ -54,7 +54,7 @@ function Profile(props) {
         </div>
         <button disabled={toggleSaveButton()} className={`profile__save ${toggleSaveButton() ? 'profile__save_blocked' : ''} `} type="submit" aria-label="Сохранить изменения">Редактировать</button>
       </form>
-      <Link to="/" className="profile__link">Выйти из аккаунта</Link>
+      <Link to="/" onClick={props.onSignOut} className="profile__link">Выйти из аккаунта</Link>
     </section>
   );
 }
