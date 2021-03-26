@@ -8,7 +8,7 @@
 }
 
 .auth__form {
-  min-height: 650px;
+  min-height: 550px;
   height: 74.5vh;
   display: flex;
   flex-direction: column;
@@ -66,7 +66,6 @@
 
 .auth__input_password {
   letter-spacing: .03em;
-  color: #ff4062;
 }
 
 .auth__error-text {

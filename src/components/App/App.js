@@ -34,6 +34,7 @@ function App() {
 
   const isSuperMobile = useMediaQuery({ query: `(max-width: 500px)` });
   
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [initialMovies, setInitialMovies] = React.useState([]);
   const [savedMovies, setSavedMovies] = React.useState([]);
   const [isPopupMenuOpen, setPopupMenuOpen] = React.useState(false);
@@ -42,7 +43,11 @@ function App() {
     setPopupMenuOpen(true);
   }
 
-  // Фильмы
+  function closeAllPopups() {
+    setPopupMenuOpen(false);
+  }
+
+  /*// Фильмы
   React.useEffect(() => {
     moviesApi.getInitialMovies()
       .then((movies) => {
@@ -56,7 +61,50 @@ function App() {
         console.log(movies);
         setSavedMovies(movies);
       })
-  }, []);
+  }, []);*/
+
+  function handleLogIn() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      setIsLoggedIn(true);
+      mainApi.getToken(token)
+        .then((res) => {
+          if (res) {
+            /*setCurrentUser(res.data);*/
+            setIsLoggedIn(true);
+            history.push('/');
+          }
+        })
+        .catch(err => console.log(`Ошибка при запросе токена: ${err.message}`));
+    }
+  }
+
+  // Регистрация пользователя
+  function registerUser(name, email, password) {
+    mainApi.register(name, email, password)
+      .then((res) => {
+        if (res) {
+          console.log(res);
+          history.push('/signin');
+        } else {
+          return
+        }
+    })
+      .catch(err => console.log(`Ошибка при попытке регистрации пользователя: ${err.message}`));
+  }
+
+  // Авторизация пользователя
+  function authorizeUser(email, password) {
+    mainApi.authorize(email, password)
+      .then((res) => {
+        if (res.token) {
+          setIsLoggedIn(true);
+          handleLogIn();
+          history.push('/');
+        }
+      })
+      .catch(err => console.log(`Ошибка при попытке входа пользователя: ${err.message}`));
+  }
 
   return (
     <div className="app">
@@ -68,7 +116,7 @@ function App() {
       >
         <Switch>
           <Route exact path="/">
-            <Header />
+            <Header isLoggedIn={isLoggedIn} isMobile={isMobile} onMenuClick={handleMenuClick} />
             <Main />
             <Footer />
           </Route>
@@ -94,17 +142,17 @@ function App() {
           </Route>
           <Route path="/signin">
             <Header isMobile={isMobile} isSuperMobile={isSuperMobile} onMenuClick={handleMenuClick} />
-            <Login isMobile={isMobile} isSuperMobile={isSuperMobile} />
+            <Login onLogin={authorizeUser} isMobile={isMobile} isSuperMobile={isSuperMobile} />
           </Route>
           <Route path="/signup">
             <Header isMobile={isMobile} isSuperMobile={isSuperMobile} onMenuClick={handleMenuClick} />
-            <Register isMobile={isMobile} isSuperMobile={isSuperMobile} />
+            <Register onRegister={registerUser} isMobile={isMobile} isSuperMobile={isSuperMobile} />
           </Route>
           <Route path="/*">
             <NotFound history={history} />
           </Route>
         </Switch>
-        <PopupMenu isOpen={isPopupMenuOpen} />
+        <PopupMenu isOpen={isPopupMenuOpen} onClose={closeAllPopups} />
       </div>
     </div>
   );

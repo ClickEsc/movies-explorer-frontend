@@ -17,6 +17,7 @@ function AuthForm(props) {
     <div className="auth">
       <form
         noValidate
+        onSubmit={props.onSubmit}
         className={`auth__form auth__form_${props.name}`} name={`${props.name}-form`}
         style={setFormStyle()}>
         <div className="auth__wrap">
@@ -24,19 +25,19 @@ function AuthForm(props) {
           { props.registerForm ? 
             <div className="auth__container auth__container_name">
               <label className="auth__label auth__label_name" for="authNameInput">Имя</label>
-              <input required value="Виталий" className="auth__input auth__input_name" id="authNameInput" type="email"></input>
+              <input required value={props.userName} onChange={props.handleUserNameChange} className="auth__input auth__input_name" id="authNameInput" type="email"></input>
               <span id="nameInputError" className="auth__error-text auth__error-text_visible auth__error-text_name"></span>
             </div>
           : "" }
           <div className="auth__container auth__container_email">
             <label className="auth__label auth__label_email" for="authEmailInput">E-mail</label>
-            <input required value="pochta@yandex.ru|" id="authEmailInput" type="email" className="auth__input auth__input_email"></input>
+            <input required value={props.userEmail} onChange={props.handleUserEmailChange} id="authEmailInput" type="email" className="auth__input auth__input_email"></input>
             <span id="emailInputError" className="auth__error-text auth__error-text_visible auth__error-text_email"></span>
           </div>
           <div className="auth__container auth__container_password">
             <label className="auth__label auth__label_password" for="authPasswordInput">Пароль</label>
-            <input required value={ props.registerForm ? "••••••••••••••" : '' } id="authPasswordInput" type="password" className="auth__input auth__input_password"></input>
-            <span id="passwordInputError" className={ props.registerForm ? "auth__error-text auth__error-text_visible auth__error-text_password" : "auth__error-text auth__error-text_password" }>Что-то пошло не так...</span>
+            <input required value={props.userPassword} onChange={props.handleUserPasswordChange} id="authPasswordInput" type="password" className="auth__input auth__input_password"></input>
+            <span id="passwordInputError" className="auth__error-text auth__error-text_password"></span>
           </div>
         </div> 
         <div className="auth__wrap">
