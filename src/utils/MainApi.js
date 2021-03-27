@@ -1,3 +1,5 @@
+import { baseUrlForImages, noData, noImagePic, noVideoPic } from './constants';
+
 class MainApi {
   constructor(options) {
     this.baseUrl = options.baseUrl;
@@ -26,7 +28,19 @@ class MainApi {
     return fetch(`${this.baseUrl}/movies`, {
       method: 'POST',
       headers: this.headers,
-      body: JSON.stringify(movie)
+      body: JSON.stringify({
+        country: movie.country ? movie.country : noData,
+        director: movie.director ? movie.director : noData,
+        duration: movie.duration ? movie.duration : noData,
+        year: movie.year ? movie.year : noData,
+        description: movie.description ? movie.description : noData,
+        image: movie.image ? baseUrlForImages + movie.image.url : noImagePic,
+        trailerLink: movie.trailerLink ? movie.trailerLink : noVideoPic,
+        thumbnail: movie.image.formats.thumbnail ? baseUrlForImages + movie.image.formats.thumbnail.url : noImagePic,
+        nameRU: movie.nameRU ? movie.nameRU : noData,
+        nameEN: movie.nameEN ? movie.nameEN : noData,
+        id: movie.id
+      })
     })
       .then(res => this._handlePromise(res))
   }
@@ -111,7 +125,7 @@ class MainApi {
 }
 
 export const mainApi = new MainApi({
-  baseUrl: 'https://api.diploma.skubilina.students.nomoredomains.icu',
+  baseUrl: 'http://localhost:3000',
   headers: {
     "Content-Type": "application/json",
     "Authorization": `Bearer ${localStorage.getItem('token')}`

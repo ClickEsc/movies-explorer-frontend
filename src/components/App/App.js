@@ -49,14 +49,6 @@ function App() {
         setInitialMovies(movies);
       })
   }, [isLoggedIn]);
-
-  React.useEffect(() => {
-    mainApi.getSavedMovies()
-      .then((movies) => {
-        console.log(movies);
-        setSavedMovies(movies);
-      })
-  }, [isLoggedIn]);
   
   // Проверка токена и вход
   function handleLogIn() {
@@ -115,24 +107,42 @@ function App() {
     history.push('/');
   }
 
-  React.useEffect(() => {
-    if (isLoggedIn) {
-      mainApi.getUserInfo()
-        .then((res) => {
-          setCurrentUser(res);
-        })
-        .catch(err => console.log(`Ошибка при обращении за информацией о пользователе: ${err.message}`))
-    }
-  }, [isLoggedIn]);
-
   // Изменение информации о пользователе
-  function updateUserInfo(currentUser) {
-    mainApi.editUserInfo(currentUser)
+  function updateUserInfo(data) {
+    mainApi.editUserInfo(data)
       .then((res) => {
         setCurrentUser(res);
+        console.log(currentUser)
     })
     .catch(err => console.log(`Ошибка при редактировании информации о пользователе: ${err.message}`))
   }
+
+  // Добавление фильмов в сохраненные
+  function addSavedMovie(movie) {
+    if (!savedMovies.find((item) => item.id === movie.id)) {
+      mainApi.addSavedMovie(movie)
+        .then((res) => {
+          console.log(res);
+          savedMovies.push(res);
+          console.log(savedMovies)
+      })
+      .catch(err => console.log(`Ошибка при добавлении фильма в сохраненные: ${err.message}`))
+    }
+  }
+
+  // Первичная загрузка данных о пользователе и сохраненных фильмах
+  React.useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      Promise.all([mainApi.getUserInfo(), mainApi.getSavedMovies()])
+        .then(([userInfo, savedMovieCards]) => {
+          setCurrentUser(userInfo);
+          setSavedMovies(savedMovieCards);
+          console.log(savedMovieCards);
+        })
+        .catch(err => console.log(`Ошибка первичной загрузки данных о пользователе и сохраненных фильмах: ${err.message}`))
+    }
+  }, []);
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -159,9 +169,11 @@ function App() {
               loggedIn={isLoggedIn}
               component={Movies}
               movies={initialMovies}
+              onSave={addSavedMovie}
               isLoading={false}
               isMobile={isMobile}
-              isSuperMobile={isSuperMobile} />
+              isSuperMobile={isSuperMobile}
+            />
             <ProtectedRoute
               path="/saved-movies"
               loggedIn={isLoggedIn}
@@ -169,7 +181,8 @@ function App() {
               movies={savedMovies}
               isLoading={false}
               isMobile={isMobile}
-              isSuperMobile={isSuperMobile} />
+              isSuperMobile={isSuperMobile}
+            />
             <ProtectedRoute
               path="/profile"
               loggedIn={isLoggedIn}
@@ -177,7 +190,8 @@ function App() {
               onProfileUpdate={updateUserInfo}
               onSignOut={signOut}
               isMobile={isMobile}
-              isSuperMobile={isSuperMobile} />
+              isSuperMobile={isSuperMobile}
+            />
             <Route path="/*">
               <NotFound history={history} />
             </Route>

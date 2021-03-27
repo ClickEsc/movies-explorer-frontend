@@ -1,17 +1,23 @@
 import React from 'react';
-import { pathname } from '../../utils/constants';
+import { useLocation } from 'react-router-dom';
+import { baseUrlForImages, noImagePic } from '../../utils/constants';
 import './MoviesCard.css';
 
 function MoviesCard(props) {
+
+  const location = useLocation();
+  const path = location.pathname;
 
   const [isShown, setIsShown] = React.useState(false);
   const [isSaved, setIsSaved] = React.useState(false);
 
   function getImageUrl() {
-    if (props.movie.image !== null) {
-      return 'https://api.nomoreparties.co' + props.movie.image.url
+    if (props.movie.image !== null || props.movie.image !== undefined) {
+      if (path === '/movies') {
+        return baseUrlForImages + props.movie.image.url
+      } else return props.movie.image
     } else {
-      return 'https://www.webpsilon.com/wp-content/uploads/2018/02/Image_Not_Found_1x_qjofp8.png'
+      return noImagePic
     }
   }
 
@@ -31,6 +37,7 @@ function MoviesCard(props) {
   }
 
   function saveMovie() {
+    props.onSave(props.movie);
     setIsSaved(true);
   }
 
@@ -39,7 +46,7 @@ function MoviesCard(props) {
   }
 
   return (
-    <div className="movies-card" onMouseEnter={showButton} onMouseLeave={hideButton}>
+    <li className="movies-card" onMouseEnter={showButton} onMouseLeave={hideButton}>
       <a className="movies-card__link"
         href={props.movie.trailerLink}
         target="_blank"
@@ -48,14 +55,14 @@ function MoviesCard(props) {
         >
           <img className="movies-card__image" src={getImageUrl()} alt={`Кадр из фильма ${props.movie.nameRU}`} />
       </a>
-      {pathname === "/movies" && isShown && isSaved && (<button onClick={deleteMovie} className="movies-card__button movies-card__button_unfav" type="button"></button>)}
-      {pathname === "/movies" && isShown && !isSaved && (<button onClick={saveMovie} className="movies-card__button movies-card__button_fav" type="button">Сохранить</button>)}
-      {pathname === "/saved-movies" && isShown && isSaved && (<button onClick={deleteMovie} className="movies-card__button movies-card__button_delete" type="button"></button>)}
+      {path === "/movies" && isSaved && (<button onClick={deleteMovie} className="movies-card__button movies-card__button_unfav" type="button"></button>)}
+      {path === "/movies" && isShown && !isSaved && (<button onClick={saveMovie} className="movies-card__button movies-card__button_fav" type="button">Сохранить</button>)}
+      {path === "/saved-movies" && isShown && (<button onClick={deleteMovie} className="movies-card__button movies-card__button_delete" type="button"></button>)}
       <div className="movies-card__info">
         <h3 className="movies-card__title">{props.movie.nameRU}</h3>
         <p className="movies-card__duration">{getTimeFromMins(props.movie.duration)}</p>
       </div>
-    </div>
+    </li>
   )
 };
 

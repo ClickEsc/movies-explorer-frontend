@@ -1,17 +1,26 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import MoviesCard from '../MoviesCard/MoviesCard';
-import { pathname } from '../../utils/constants';
-
 import './MoviesCardList.css';
 
 function MoviesCardList(props) {
+  const location = useLocation();
+  const path = location.pathname;
 
   const [moviesCount, setMoviesCount] = React.useState(0);
+  const [size, setSize] = React.useState([0, 0]);
 
+  React.useLayoutEffect(() => {
+    function updateSize() {
+      setSize([window.innerWidth, window.innerHeight]);
+    }
+    window.addEventListener('resize', updateSize);
+    updateSize();
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
+  
   const renderedMovies = props.movies.slice(0, moviesCount).map((item) => (
-    <li key={item.id} className="movies-cards__card">
-      <MoviesCard movie={item} />
-    </li>
+    <MoviesCard key={item.id} movie={item} onSave={props.onSave} />
   ));
 
   function handleMoviesCount() {
@@ -35,16 +44,16 @@ function MoviesCardList(props) {
   }
 
   function showHint() {
-    if (pathname === "/movies") {
+    if (path === "/movies") {
       return 'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз'
-    } else if (pathname === "/saved-movies") {
+    } else if (path === "/saved-movies") {
       return 'У Вас пока нет сохранённых фильмов'
     }
   }
 
   React.useEffect(() => {
     handleMoviesCount();
-  }, []);
+  }, [size]);
 
   return (
     <>
@@ -52,7 +61,7 @@ function MoviesCardList(props) {
         {renderedMovies && renderedMovies}
         {!renderedMovies && <p className="movies-cards__hint">{showHint()}</p>}
       </ul>
-      {pathname === "/movies" && renderedMovies && <button onClick={loadMore} className="movies-cards__load-more" type="button">Ещё</button>}
+      {path === "/movies" && renderedMovies && <button onClick={loadMore} className="movies-cards__load-more" type="button">Ещё</button>}
     </>
   )
 };

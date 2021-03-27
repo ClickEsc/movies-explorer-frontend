@@ -34,9 +34,11 @@ function checkMyAge() {
 
 const thisYear = now.getFullYear();
 
-const pathname = window.location.pathname;
-const width = window.innerWidth;
+const baseUrlForImages = 'https://api.nomoreparties.co';
+const noData = 'Нет данных';
+const noImagePic = 'https://www.webpsilon.com/wp-content/uploads/2018/02/Image_Not_Found_1x_qjofp8.png';
+const noVideoPic = 'https://i.ytimg.com/vi/3QtqXM5sdaY/maxresdefault.jpg';
 
 module.exports = {
-  checkMyAge, thisYear, pathname, width
+  checkMyAge, thisYear, baseUrlForImages, noData, noImagePic, noVideoPic
 }
