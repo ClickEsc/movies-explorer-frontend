@@ -1,3 +1,4 @@
+import React from 'react';
 import SearchForm from '../SearchForm/SearchForm';
 import Preloader from '../Preloader/Preloader';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
@@ -5,12 +6,28 @@ import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import './SavedMovies.css';
 
 function SavedMovies(props) {
+
+  const [moviesToShow, setMoviesToShow] = React.useState(props.movies);
+
+  function filterMoviesByDuration(isChecked) {
+    if (isChecked) {
+      const movies = props.movies.filter((item) => item.duration <= 40);
+      setMoviesToShow(movies);
+    } else {
+      setMoviesToShow(props.movies);
+    }
+  }
+
+  React.useEffect(() => {
+    setMoviesToShow(props.movies);
+  }, [props.movies]);
+
   return (
     <section className="saved-movies">
-      <SearchForm onSearch={props.onSearch} />
+      <SearchForm onSearch={props.onSearch} onDurationFilter={filterMoviesByDuration} />
       {props.isLoading
         ? <Preloader />
-        : <MoviesCardList movies={props.movies} onDelete={props.onDelete} isMobile={props.isMobile} isSuperMobile={props.isSuperMobile} />
+        : <MoviesCardList movies={moviesToShow} onDelete={props.onDelete} isMobile={props.isMobile} isSuperMobile={props.isSuperMobile} />
       }
       {props.movies.length === 0 && <p className="saved-movies__hint">У Вас пока нет сохранённых фильмов</p>}
     </section>
