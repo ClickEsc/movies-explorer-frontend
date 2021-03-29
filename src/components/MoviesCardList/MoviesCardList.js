@@ -20,7 +20,7 @@ function MoviesCardList(props) {
   }, []);
   
   const renderedMovies = props.movies.slice(0, moviesCount).map((item) => (
-    <MoviesCard key={item.id} movie={item} onSave={props.onSave} />
+    <MoviesCard key={item.id} movie={item} onSave={props.onSave} onDelete={props.onDelete}/>
   ));
 
   function handleMoviesCount() {
@@ -46,8 +46,6 @@ function MoviesCardList(props) {
   function showHint() {
     if (path === "/movies") {
       return 'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз'
-    } else if (path === "/saved-movies") {
-      return 'У Вас пока нет сохранённых фильмов'
     }
   }
 
@@ -61,7 +59,7 @@ function MoviesCardList(props) {
         {renderedMovies && renderedMovies}
         {!renderedMovies && <p className="movies-cards__hint">{showHint()}</p>}
       </ul>
-      {path === "/movies" && renderedMovies && <button onClick={loadMore} className="movies-cards__load-more" type="button">Ещё</button>}
+      {path === "/movies" && renderedMovies.length !== 0 && <button onClick={loadMore} className="movies-cards__load-more" type="button">Ещё</button>}
     </>
   )
 };

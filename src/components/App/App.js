@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch, Redirect, useHistory, useLocation } from 'react-router-dom';
+import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
@@ -30,8 +30,12 @@ function App() {
   
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({ name: '', email: ''});
+  const [isLoading, setIsLoading] = React.useState(false);
   const [initialMovies, setInitialMovies] = React.useState([]);
+  const [moviesFoundBySearch, setMoviesFoundBySearch] = React.useState([]);
   const [savedMovies, setSavedMovies] = React.useState([]);
+  /*const [moviesSavedByUser, setMoviesSavedByUser] = React.useState([]);*/
+  /*const [isSavedByUser, setIsSavedByUser] = React.useState(false);*/
   const [isPopupMenuOpen, setPopupMenuOpen] = React.useState(false);
 
   function handleMenuClick() {
@@ -49,6 +53,14 @@ function App() {
         setInitialMovies(movies);
       })
   }, [isLoggedIn]);
+
+    // Фильмы
+    React.useEffect(() => {
+      moviesApi.getInitialMovies()
+        .then((movies) => {
+          setInitialMovies(checkSavedMovies(movies, savedMovies));
+        })
+    }, [savedMovies]);
   
   // Проверка токена и вход
   function handleLogIn() {
@@ -60,7 +72,7 @@ function App() {
           if (res) {
             setCurrentUser(res);
             setIsLoggedIn(true);
-            history.push('/');
+            history.push('/movies');
           }
         })
         .catch(err => console.log(`Ошибка при запросе токена: ${err.message}`));
@@ -96,7 +108,7 @@ function App() {
         if (res.token) {
           setIsLoggedIn(true);
           handleLogIn();
-          history.push('/');
+          history.push('/movies');
         }
       })
       .catch(err => console.log(`Ошибка при попытке входа пользователя: ${err.message}`));
@@ -117,17 +129,62 @@ function App() {
     .catch(err => console.log(`Ошибка при редактировании информации о пользователе: ${err.message}`))
   }
 
+ 
+  // Поиск по фильмам
+  function searchInitialMovies(query) {
+    setIsLoading(true);
+    const queryItems = query.toLowerCase().split(' ');
+    const result = [];
+    for (let i = 0; i < queryItems.length; i+=1) {
+      initialMovies.forEach((item) => {
+        if (item.nameRU.toLowerCase().indexOf(" " + queryItems[i] + " " || queryItems[i] + " " || " " + queryItems[i]) !== -1) {
+          result.push(item);
+        }
+      })
+    }
+    /*localStorage.setItem('searchMovieResult', JSON.stringify(result));*/
+    console.log(localStorage);
+    setMoviesFoundBySearch(result);
+    setIsLoading(false);
+  }
+
+  function checkSavedMovies(initialMovies, savedMovies) {
+    savedMovies.forEach((savedMovie) => {
+      initialMovies.find((item) => item.id === savedMovie.id).isSavedByUser = true;
+      initialMovies.find((item) => item.id === savedMovie.id)._id = savedMovie._id;
+    });
+    return initialMovies;
+  }
+
+  /*React.useEffect(() => {
+    const result = localStorage.getItem('searchMovieResult');
+    if (result) {
+      setMoviesFoundBySearch(result);
+    }
+  }, []);*/
+
   // Добавление фильмов в сохраненные
   function addSavedMovie(movie) {
     if (!savedMovies.find((item) => item.id === movie.id)) {
       mainApi.addSavedMovie(movie)
-        .then((res) => {
-          console.log(res);
-          savedMovies.push(res);
-          console.log(savedMovies)
+        .then((newSavedMovie) => {
+        setSavedMovies([newSavedMovie, ...savedMovies]);
       })
       .catch(err => console.log(`Ошибка при добавлении фильма в сохраненные: ${err.message}`))
     }
+  }
+
+  // Удаление фильма из сохраненных
+  function deleteSavedMovie(movie) {
+    mainApi.deleteSavedMovie(movie)
+      .then(() => {
+        if (!movie._id) {
+          movie._id = savedMovies.find((item) => item.id === movie.id);
+        }
+        const newMovieCards = savedMovies.filter((c) => c._id !== movie._id);
+        setSavedMovies(newMovieCards);
+      })
+      .catch(err => console.log(`Ошибка при удалении фильма из сохраненных: ${err.message}`))
   }
 
   // Первичная загрузка данных о пользователе и сохраненных фильмах
@@ -138,7 +195,6 @@ function App() {
         .then(([userInfo, savedMovieCards]) => {
           setCurrentUser(userInfo);
           setSavedMovies(savedMovieCards);
-          console.log(savedMovieCards);
         })
         .catch(err => console.log(`Ошибка первичной загрузки данных о пользователе и сохраненных фильмах: ${err.message}`))
     }
@@ -168,9 +224,11 @@ function App() {
               path="/movies"
               loggedIn={isLoggedIn}
               component={Movies}
-              movies={initialMovies}
+              movies={moviesFoundBySearch}
+              onSearch={searchInitialMovies}
               onSave={addSavedMovie}
-              isLoading={false}
+              onDelete={deleteSavedMovie}
+              isLoading={isLoading}
               isMobile={isMobile}
               isSuperMobile={isSuperMobile}
             />
@@ -179,6 +237,7 @@ function App() {
               loggedIn={isLoggedIn}
               component={SavedMovies}
               movies={savedMovies}
+              onDelete={deleteSavedMovie}
               isLoading={false}
               isMobile={isMobile}
               isSuperMobile={isSuperMobile}

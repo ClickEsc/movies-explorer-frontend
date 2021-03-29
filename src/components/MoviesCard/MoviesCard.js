@@ -39,10 +39,13 @@ function MoviesCard(props) {
   function saveMovie() {
     props.onSave(props.movie);
     setIsSaved(true);
+    props.movie.isSavedByUser = true;
   }
 
   function deleteMovie() {
+    props.onDelete(props.movie);
     setIsSaved(false);
+    props.movie.isSavedByUser = false;
   }
 
   return (
@@ -55,8 +58,8 @@ function MoviesCard(props) {
         >
           <img className="movies-card__image" src={getImageUrl()} alt={`Кадр из фильма ${props.movie.nameRU}`} />
       </a>
-      {path === "/movies" && isSaved && (<button onClick={deleteMovie} className="movies-card__button movies-card__button_unfav" type="button"></button>)}
-      {path === "/movies" && isShown && !isSaved && (<button onClick={saveMovie} className="movies-card__button movies-card__button_fav" type="button">Сохранить</button>)}
+      {path === "/movies" && props.movie.isSavedByUser && (<button onClick={deleteMovie} className="movies-card__button movies-card__button_unfav" type="button"></button>)}
+      {path === "/movies" && isShown && !props.movie.isSavedByUser && (<button onClick={saveMovie} className="movies-card__button movies-card__button_fav" type="button">Сохранить</button>)}
       {path === "/saved-movies" && isShown && (<button onClick={deleteMovie} className="movies-card__button movies-card__button_delete" type="button"></button>)}
       <div className="movies-card__info">
         <h3 className="movies-card__title">{props.movie.nameRU}</h3>
