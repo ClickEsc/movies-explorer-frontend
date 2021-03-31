@@ -1,46 +1,38 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import AuthForm from "../AuthForm/AuthForm";
+import { useFormValidation } from '../../utils/validation';
 import './Login.css';
 
 function Login(props) {
 
-  const [userEmail, setUserEmail] = React.useState('');
-  const [userPassword, setUserPassword] = React.useState('');
-
-  function handleUserEmailChange(e) {
-    setUserEmail(e.target.value)
-  };
-
-  function handleUserPasswordChange(e) {
-    setUserPassword(e.target.value)
-  };
-
-  function resetForm() {
-    setUserEmail('');
-    setUserPassword('');
-  }
+  const { values, handleChange, errors, isValid, resetForm } = useFormValidation({});
 
   function handleSubmit(e) {
     e.preventDefault();
-    props.onLogin(userEmail, userPassword);
+    if (isValid) {
+      props.onLogin(values.email, values.password);
+    }
     resetForm();
   }
 
   return (
     <AuthForm
-      userEmail={userEmail || ''}
-      userPassword={userPassword || ''}
-      handleUserEmailChange={handleUserEmailChange}
-      handleUserPasswordChange={handleUserPasswordChange}
+      userEmail={values.email || ''}
+      userPassword={values.password || ''}
+      onChange={handleChange}
       onSubmit={handleSubmit}
+      isValid={isValid}
+      inputErrors={errors}
+      isError={props.isError}
+      error={props.error}
       isSuperMobile={props.isSuperMobile}
       name="signin"
       title="Рады видеть!"
       buttonTitle="Войти"
       children={
         <>
-          <p className="login__hint">Ещё не зарегистрированы?<Link to="/signin" className="login__link">Регистрация</Link></p>
+          <p className="login__hint">Ещё не зарегистрированы?<Link to="/signup" className="login__link">Регистрация</Link></p>
         </>
       }
     />

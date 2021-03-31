@@ -1,47 +1,30 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import AuthForm from "../AuthForm/AuthForm";
+import { useFormValidation } from '../../utils/validation';
 import './Register.css';
 
 function Register(props) {
 
-  const [userName, setUserName] = React.useState('');
-  const [userEmail, setUserEmail] = React.useState('');
-  const [userPassword, setUserPassword] = React.useState('');
-
-  function handleUserNameChange(e) {
-    setUserName(e.target.value)
-  };
-
-  function handleUserEmailChange(e) {
-    setUserEmail(e.target.value)
-  };
-
-  function handleUserPasswordChange(e) {
-    setUserPassword(e.target.value)
-  };
-
-  function resetForm() {
-    setUserName('');
-    setUserEmail('');
-    setUserPassword('');
-  }
+  const { values, handleChange, errors, isValid, resetForm } = useFormValidation({});
 
   function handleSubmit(e) {
     e.preventDefault();
-    props.onRegister(userName, userEmail, userPassword);
+    if (isValid) {
+      props.onRegister(values.name, values.email, values.password);
+    }
     resetForm();
   }
 
   return (
     <AuthForm
-      userName={userName || ''}
-      userEmail={userEmail || ''}
-      userPassword={userPassword || ''}
-      handleUserNameChange={handleUserNameChange}
-      handleUserEmailChange={handleUserEmailChange}
-      handleUserPasswordChange={handleUserPasswordChange}
+      userName={values.name || ''}
+      userEmail={values.email || ''}
+      userPassword={values.password || ''}
+      onChange={handleChange}
       onSubmit={handleSubmit}
+      isValid={isValid}
+      inputErrors={errors}
       isSuperMobile={props.isSuperMobile}
       name="signup"
       title="Добро пожаловать!"

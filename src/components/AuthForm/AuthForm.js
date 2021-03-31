@@ -1,14 +1,18 @@
-import { pathname } from '../../utils/constants';
+import React from 'react';
+import { useLocation } from 'react-router-dom';
 import './AuthForm.css';
 
 function AuthForm(props) {
 
+  const location = useLocation();
+  const path = location.pathname;
+
   function setFormStyle() {
-    if ((pathname === "/signin") && (props.isMobile)) {
+    if (path === "/signin" && props.isMobile) {
       return {height: "300px"}
-    } else if ((pathname === "/signup") && (props.isSuperMobile)) {
+    } else if (path === "/signup" && props.isSuperMobile) {
       return {height: "84vh"}
-    } else if ((pathname === "/signin") && (props.isSuperMobile)) {
+    } else if (path === "/signin" && props.isSuperMobile) {
       return {height: "85vh"}
     }
   }
@@ -22,26 +26,63 @@ function AuthForm(props) {
         style={setFormStyle()}>
         <div className="auth__wrap">
           <h2 className="auth__title">{`${props.title}`}</h2>
-          { props.registerForm ? 
+          { props.name === "signup" ? 
             <div className="auth__container auth__container_name">
               <label className="auth__label auth__label_name" for="authNameInput">Имя</label>
-              <input required value={props.userName} onChange={props.handleUserNameChange} className="auth__input auth__input_name" id="authNameInput" type="email"></input>
-              <span id="nameInputError" className="auth__error-text auth__error-text_visible auth__error-text_name"></span>
+              <input
+                required
+                value={props.userName}
+                name="name"
+                minLength="2"
+                maxLength="30"
+                onChange={props.onChange}
+                className="auth__input auth__input_name"
+                id="authNameInput"
+                type="text">
+              </input>
+              {props.inputErrors.name
+                && <span id="nameInputError" className="auth__error-text auth__error-text_name">{props.inputErrors.name}</span>}
             </div>
           : "" }
           <div className="auth__container auth__container_email">
             <label className="auth__label auth__label_email" for="authEmailInput">E-mail</label>
-            <input required value={props.userEmail} onChange={props.handleUserEmailChange} id="authEmailInput" type="email" className="auth__input auth__input_email"></input>
-            <span id="emailInputError" className="auth__error-text auth__error-text_visible auth__error-text_email"></span>
+            <input
+              required
+              value={props.userEmail}
+              name="email"
+              onChange={props.onChange}
+              className="auth__input auth__input_email"
+              id="authEmailInput"
+              type="email">
+            </input>
+            {props.inputErrors.email
+              && <span id="emailInputError" className="auth__error-text auth__error-text_email">{props.inputErrors.email}</span>}
           </div>
           <div className="auth__container auth__container_password">
             <label className="auth__label auth__label_password" for="authPasswordInput">Пароль</label>
-            <input required value={props.userPassword} onChange={props.handleUserPasswordChange} id="authPasswordInput" type="password" className="auth__input auth__input_password"></input>
-            <span id="passwordInputError" className="auth__error-text auth__error-text_password"></span>
+            <input
+              required
+              value={props.userPassword}
+              name="password"
+              minLength="6"
+              onChange={props.onChange}
+              className="auth__input auth__input_password"
+              id="authPasswordInput"
+              type="password">
+            </input>
+            {props.inputErrors.password 
+              && <span id="passwordInputError" className="auth__error-text auth__error-text_password">{props.inputErrors.password}</span>}
           </div>
         </div> 
         <div className="auth__wrap">
-          <button className="auth__save" type="submit" aria-label="Сохранить изменения">{`${props.buttonTitle}`}</button>
+          {props.isError && <p className="auth__error">{props.error}</p>}
+          <button
+            disabled={!props.isValid}
+            className={`auth__save ${!props.isValid && "auth__save_disabled"}`}
+            type="submit"
+            aria-label="Сохранить изменения">
+              {`${props.buttonTitle}`}
+          </button>
           {props.children}
         </div>
       </form>
