@@ -9,6 +9,13 @@
   align-items: center;
 }
 
+.saved-movies__hint {
+  margin: 0;
+  font-size: 18px;
+  line-height: 25px;
+  color: #a0a0a0;
+}
+
 @media screen and (max-width: 850px) {
   .saved-movies {
     padding: 70px 30px 160px;
@@ -18,5 +25,10 @@
 @media screen and (max-width: 500px) {
   .saved-movies {
     padding: 70px 10px 80px;
+  }
+
+  .saved-movies__hint {
+    font-size: 14px;
+    line-height: 18px;
   }
 }

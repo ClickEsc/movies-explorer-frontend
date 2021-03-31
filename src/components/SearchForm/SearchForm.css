@@ -1,6 +1,6 @@
 .search-form {
   box-sizing: border-box;
-  padding: 73px 70px 47px;
+  padding: 0 0 115px;
   width: 100%;
 }
 
@@ -107,14 +107,14 @@
 }
 
 .search-form__label {
-  margin: 0 0 2px 14px;
+  margin: 0 0 2px 15px;
   font-size: 13px;
   line-height: 18px;
 }
 
 @media screen and (max-width: 850px) {
   .search-form {
-    padding: 76px 30px 60px;
+    padding: 80px 0 60px;
   }
 
   .search-form__wrap_film-duration {
@@ -129,7 +129,11 @@
 
 @media screen and (max-width: 500px) {
   .search-form {
-    padding: 84px 14px 50px;
+    padding: 78px 0 90px;
+  }
+
+  .search-form__search-button {
+    margin: 2px 4px 0 0;
   }
 
   .search-form__wrap {

@@ -1,8 +1,13 @@
 .footer {
+  display: none;
   box-sizing: border-box;
   padding: 79px 70px 20px;
   width: 100%;
   background-color: #fff;
+}
+
+.footer_visible {
+  display: block;
 }
 
 .footer__description {
