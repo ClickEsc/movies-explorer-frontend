@@ -13,6 +13,10 @@ import Login from '../Login/Login';
 import Register from '../Register/Register';
 import NotFound from '../NotFound/NotFound';
 import PopupMenu from '../PopupMenu/PopupMenu';
+import InfoToolTip from '../InfoToolTip/InfoToolTip';
+
+import tickMark from '../../images/tick-mark.svg';
+import crossMark from '../../images/cross-mark.svg';
 import { moviesApi } from '../../utils/MoviesApi';
 import { mainApi } from '../../utils/MainApi';
 import './App.css';
@@ -31,12 +35,38 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [currentUser, setCurrentUser] = React.useState({ name: '', email: ''});
   const [isLoading, setIsLoading] = React.useState(false);
+  const [isError, setIsError] = React.useState(false);
   const [initialMovies, setInitialMovies] = React.useState([]);
   const [moviesFoundBySearch, setMoviesFoundBySearch] = React.useState([]);
   const [savedMovies, setSavedMovies] = React.useState([]);
-  /*const [moviesSavedByUser, setMoviesSavedByUser] = React.useState([]);*/
-  /*const [isSavedByUser, setIsSavedByUser] = React.useState(false);*/
+  const [error, setError] = React.useState('');
+  const [moviesSavedByUser, setMoviesSavedByUser] = React.useState([]);
+  const [isSavedByUser, setIsSavedByUser] = React.useState(false);
   const [isPopupMenuOpen, setPopupMenuOpen] = React.useState(false);
+  const [isHint, setIsHint] = React.useState(false);
+
+  
+  // Хук для попапа информирования об успешности регистрации
+  const [infoTooltip, setInfoTooltip] = React.useState(undefined);
+  const [isInfoTooltipOpen, setInfoTooltipOpen] = React.useState(false);
+
+  function handleInfoTooltip() {
+    setInfoTooltipOpen(true);
+  }
+  
+  function handleInfoTooltipContent(res) {
+    if (res) {
+      setInfoTooltip({
+        src: tickMark,
+        text: 'Вы успешно зарегистрировались!',
+      });
+    } else {
+      setInfoTooltip({
+        src: crossMark,
+        text: 'Что-то пошло не так! Попробуйте ещё раз.',
+      });
+    }
+  }
 
   function handleMenuClick() {
     setPopupMenuOpen(true);
@@ -44,23 +74,23 @@ function App() {
 
   function closeAllPopups() {
     setPopupMenuOpen(false);
+    setInfoTooltipOpen(false);
   }
 
-  // Фильмы
+  /*React.useEffect(() => {
+    const movies = savedMovies.find((item) => item.owner === currentUser._id);
+    setMoviesSavedByUser(movies);
+    console.log(moviesSavedByUser)
+  }, []);*/
+
+  
+    // Фильмы
   React.useEffect(() => {
     moviesApi.getInitialMovies()
       .then((movies) => {
-        setInitialMovies(movies);
+        setInitialMovies(checkSavedMovies(movies, savedMovies));
       })
-  }, [isLoggedIn]);
-
-    // Фильмы
-    React.useEffect(() => {
-      moviesApi.getInitialMovies()
-        .then((movies) => {
-          setInitialMovies(checkSavedMovies(movies, savedMovies));
-        })
-    }, [savedMovies]);
+  }, [savedMovies]);
   
   // Проверка токена и вход
   function handleLogIn() {
@@ -75,7 +105,14 @@ function App() {
             history.push('/movies');
           }
         })
-        .catch(err => console.log(`Ошибка при запросе токена: ${err.message}`));
+        .catch((err) => {
+          setIsError(true);
+          setError('При авторизации произошла ошибка. Переданный токен некорректен.');
+          console.log(`Ошибка при запросе токена: ${err.message}`)
+        });  
+    } else {
+      setIsError(true);
+      setError('При авторизации произошла ошибка. Токен не передан или передан не в том формате.');
     }
   }
 
@@ -85,6 +122,10 @@ function App() {
     if (token) {
       handleLogIn();
     }
+    /*const searchResult = localStorage.getItem.JSON.parse('searchMovieResult');
+    if (searchResult) {
+
+    }*/
   }, []);
 
   // Регистрация пользователя
@@ -92,13 +133,23 @@ function App() {
     mainApi.register(name, email, password)
       .then((res) => {
         if (res) {
-          console.log(res);
+          handleInfoTooltipContent(res);
+          handleInfoTooltip();
           history.push('/signin');
         } else {
-          return
+          handleInfoTooltipContent(res);
+          handleInfoTooltip();
         }
-    })
-      .catch(err => console.log(`Ошибка при попытке регистрации пользователя: ${err.message}`));
+      })
+      .catch((err) => {
+        setIsError(true);
+        console.log(`Ошибка при попытке регистрации пользователя: ${err.message}`);
+        if (err.message.indexOf('500' !== -1)) {
+          setError('На сервере произошла ошибка.');
+        } else if (err.message.indexOf('409' !== -1)) {
+          setError('Пользователь с таким email уже существует.');
+        }
+      })
   }
 
   // Авторизация пользователя
@@ -111,11 +162,20 @@ function App() {
           history.push('/movies');
         }
       })
-      .catch(err => console.log(`Ошибка при попытке входа пользователя: ${err.message}`));
+      .catch((err) => {
+        setIsError(true);
+        console.log(`Ошибка при попытке входа пользователя: ${err.message}`)
+        if (err.message.indexOf('500' !== -1)) {
+          setError('На сервере произошла ошибка.');
+        } else {
+          setError('Вы ввели неправильный логин или пароль.');
+        }
+      });
   }
 
   function signOut() {
-    localStorage.removeItem('token');
+    setIsLoggedIn(false);
+    localStorage.clear();
     history.push('/');
   }
 
@@ -123,10 +183,13 @@ function App() {
   function updateUserInfo(data) {
     mainApi.editUserInfo(data)
       .then((res) => {
-        setCurrentUser(res);
-        console.log(currentUser)
-    })
-    .catch(err => console.log(`Ошибка при редактировании информации о пользователе: ${err.message}`))
+        if (res) {
+          setCurrentUser(res);
+        } else {
+          setIsError(true);
+        }
+      })
+      .catch(err => console.log(`Ошибка при редактировании информации о пользователе: ${err.message}`))
   }
 
  
@@ -142,8 +205,23 @@ function App() {
         }
       })
     }
-    /*localStorage.setItem('searchMovieResult', JSON.stringify(result));*/
-    console.log(localStorage);
+    localStorage.setItem('searchMovieResult', JSON.stringify(result));
+    setMoviesFoundBySearch(result);
+    setIsLoading(false);
+  }
+
+  // Поиск по сохраненным фильмам
+  function searchSavedMovies(query) {
+    setIsLoading(true);
+    const queryItems = query.toLowerCase().split(' ');
+    const result = [];
+    for (let i = 0; i < queryItems.length; i+=1) {
+      savedMovies.forEach((item) => {
+        if (item.nameRU.toLowerCase().indexOf(" " + queryItems[i] + " " || queryItems[i] + " " || " " + queryItems[i]) !== -1) {
+          result.push(item);
+        }
+      })
+    }
     setMoviesFoundBySearch(result);
     setIsLoading(false);
   }
@@ -155,6 +233,16 @@ function App() {
     });
     return initialMovies;
   }
+
+  /*React.useEffect(() => {
+    savedMovies.forEach((item) => {
+      if (item.owner === currentUser._id) {
+        setMoviesSavedByUser([item, ...moviesSavedByUser]);
+      }
+      console.log(savedMovies);
+      console.log(moviesSavedByUser);
+    })
+  }, [savedMovies])*/
 
   /*React.useEffect(() => {
     const result = localStorage.getItem('searchMovieResult');
@@ -215,10 +303,10 @@ function App() {
               <Main />
             </Route>
             <Route path="/signin">
-              <Login onLogin={authorizeUser} isMobile={isMobile} isSuperMobile={isSuperMobile} />
+              <Login onLogin={authorizeUser} isError={isError} error={error} isMobile={isMobile} isSuperMobile={isSuperMobile} />
             </Route>
             <Route path="/signup">
-              <Register onRegister={registerUser} isMobile={isMobile} isSuperMobile={isSuperMobile} />
+              <Register onRegister={registerUser} isError={isError} error={error} isMobile={isMobile} isSuperMobile={isSuperMobile} />
             </Route>
             <ProtectedRoute
               path="/movies"
@@ -237,6 +325,7 @@ function App() {
               loggedIn={isLoggedIn}
               component={SavedMovies}
               movies={savedMovies}
+              onSearch={searchSavedMovies}
               onDelete={deleteSavedMovie}
               isLoading={false}
               isMobile={isMobile}
@@ -249,6 +338,7 @@ function App() {
               onProfileUpdate={updateUserInfo}
               onSignOut={signOut}
               isMobile={isMobile}
+              error={isError}
               isSuperMobile={isSuperMobile}
             />
             <Route path="/*">
@@ -257,6 +347,7 @@ function App() {
           </Switch>
           <Footer />
           <PopupMenu isOpen={isPopupMenuOpen} onClose={closeAllPopups} />
+          <InfoToolTip isOpen={isInfoTooltipOpen} onClose={closeAllPopups} content={infoTooltip}/>
         </div>
       </div>
     </CurrentUserContext.Provider>

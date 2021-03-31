@@ -4,6 +4,7 @@ import MoviesCard from '../MoviesCard/MoviesCard';
 import './MoviesCardList.css';
 
 function MoviesCardList(props) {
+
   const location = useLocation();
   const path = location.pathname;
 
@@ -51,6 +52,7 @@ function MoviesCardList(props) {
 
   React.useEffect(() => {
     handleMoviesCount();
+    console.log(props.movies.length);
   }, [size]);
 
   return (
@@ -59,7 +61,7 @@ function MoviesCardList(props) {
         {renderedMovies && renderedMovies}
         {!renderedMovies && <p className="movies-cards__hint">{showHint()}</p>}
       </ul>
-      {path === "/movies" && renderedMovies.length !== 0 && <button onClick={loadMore} className="movies-cards__load-more" type="button">Ещё</button>}
+      {path === "/movies" && renderedMovies.length !== 0 && (props.movies.length - moviesCount >= 2) && <button onClick={loadMore} className="movies-cards__load-more" type="button">Ещё</button>}
     </>
   )
 };

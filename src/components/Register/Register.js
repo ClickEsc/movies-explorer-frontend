@@ -24,6 +24,8 @@ function Register(props) {
       onChange={handleChange}
       onSubmit={handleSubmit}
       isValid={isValid}
+      isError={props.isError}
+      error={props.error}
       inputErrors={errors}
       isSuperMobile={props.isSuperMobile}
       name="signup"

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Link, useLocation } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import logo from "../../images/header__logo.svg";
 import menu from "../../images/mobile-menu-icon.svg"
 import Navigation from '../Navigation/Navigation';
@@ -13,6 +13,16 @@ function Header(props) {
 
   const [headerStyle, setHeaderStyle] = React.useState();
   const [headerLinkStyle, setHeaderLinkStyle] = React.useState();
+  const [size, setSize] = React.useState([0, 0]);
+
+  React.useLayoutEffect(() => {
+    function updateSize() {
+      setSize([window.innerWidth, window.innerHeight]);
+    }
+    window.addEventListener('resize', updateSize);
+    updateSize();
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
 
   function toggleHeaderStyle() {
     if (path === "/") {
@@ -43,48 +53,25 @@ function Header(props) {
   React.useEffect(() => {
     toggleHeaderStyle();
     toggleHeaderLinkStyle();
-  }, [location]);
+  }, [location, size]);
 
   return (
     <header className="header" style={headerStyle}>
       <Link to="/" className="header__link header__link_landing" style={headerLinkStyle}>
-          <img className="header__logo" src={logo} alt="Стилизованный логотип сервиса обзора фильмов 'Movies Explorer'" />
+        <img className="header__logo" src={logo} alt="Стилизованный логотип сервиса обзора фильмов 'Movies Explorer'" />
       </Link>
-      <Route exact path="/">
-        <div className="header__container">
-          {props.isLoggedIn 
-          ? <Navigation /> && (!props.isMobile ? <AccountLink /> : <img onClick={props.onMenuClick} className="header__menu-icon" src={menu} alt="Стилизованная иконка меню" />)
-          : <>
-              <Link to="/signup" className="header__link header__link_signup">Регистрация</Link>
-              <Link to="/signin" className="header__link header__link_signin">Войти</Link>
-            </>
-          }
-        </div>
-      </Route>
-      <Route path="/movies">
-        {!props.isMobile &&
-          <Navigation />
+      {props.loggedIn && !props.isSuperMobile && <Navigation />}
+      <div className="header__container">
+        {props.loggedIn
+          && (!props.isMobile 
+            ? <AccountLink /> : <img onClick={props.onMenuClick} className="header__menu-icon" src={menu} alt="Стилизованная иконка меню" />)}
+        {path === "/" && !props.loggedIn &&
+          <>
+            <Link to="/signup" className="header__link header__link_signup">Регистрация</Link>
+            <Link to="/signin" className="header__link header__link_signin">Войти</Link>
+          </>
         }
-        { !props.isMobile
-          ? <AccountLink />
-          : <img onClick={props.onMenuClick} className="header__menu-icon" src={menu} alt="Стилизованная иконка меню" />}
-      </Route>
-      <Route path="/saved-movies">
-        {!props.isMobile &&
-          <Navigation />
-        }
-        { !props.isMobile
-          ? <AccountLink />
-          : <img onClick={props.onMenuClick} className="header__menu-icon" src={menu} alt="Стилизованная иконка меню" />}
-      </Route>
-      <Route path="/profile">
-        {!props.isMobile &&
-          <Navigation />
-        }
-        { !props.isMobile
-          ? <AccountLink />
-          : <img onClick={props.onMenuClick} className="header__menu-icon" src={menu} alt="Стилизованная иконка меню" />}
-      </Route>
+      </div>
     </header>
   );
 }

@@ -7,6 +7,7 @@ import './Movies.css';
 function Movies(props) {
    
   const [moviesToShow, setMoviesToShow] = React.useState(props.movies);
+  const [isHint, setIsHint] = React.useState(false);
 
   function filterMoviesByDuration(isChecked) {
     if (isChecked) {
@@ -19,7 +20,14 @@ function Movies(props) {
 
   React.useEffect(() => {
     setMoviesToShow(props.movies);
+    if (props.movies.length === 0) {
+      setIsHint(true);
+    }
   }, [props.movies]);
+
+  React.useEffect(() => {
+    setIsHint(false);
+  }, []);
 
   return (
     <section className="movies">
@@ -28,6 +36,7 @@ function Movies(props) {
       {props.movies
         && <MoviesCardList movies={moviesToShow} onSave={props.onSave} onDelete={props.onDelete} isMobile={props.isMobile} isSuperMobile={props.isSuperMobile} />
       }
+      {isHint && <p className="movies__hint">Ничего не найдено</p>}
     </section>
   )
 };

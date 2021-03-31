@@ -47,7 +47,7 @@ function PopupMenu(props) {
         </ul>
         <AccountLink />
         <button className="popup__close-button" type="button">
-          <img onClick={props.onClose} classname="popup__close-icon" src={cross} alt="Крестик" />
+          <img onClick={props.onClose} className="popup__close-icon" src={cross} alt="Крестик" />
         </button>
       </div>
     </div>

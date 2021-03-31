@@ -28,7 +28,7 @@ function AuthForm(props) {
           <h2 className="auth__title">{`${props.title}`}</h2>
           { props.name === "signup" ? 
             <div className="auth__container auth__container_name">
-              <label className="auth__label auth__label_name" for="authNameInput">Имя</label>
+              <label className="auth__label auth__label_name">Имя</label>
               <input
                 required
                 value={props.userName}
@@ -45,7 +45,7 @@ function AuthForm(props) {
             </div>
           : "" }
           <div className="auth__container auth__container_email">
-            <label className="auth__label auth__label_email" for="authEmailInput">E-mail</label>
+            <label className="auth__label auth__label_email">E-mail</label>
             <input
               required
               value={props.userEmail}
@@ -59,7 +59,7 @@ function AuthForm(props) {
               && <span id="emailInputError" className="auth__error-text auth__error-text_email">{props.inputErrors.email}</span>}
           </div>
           <div className="auth__container auth__container_password">
-            <label className="auth__label auth__label_password" for="authPasswordInput">Пароль</label>
+            <label className="auth__label auth__label_password">Пароль</label>
             <input
               required
               value={props.userPassword}

@@ -20,8 +20,6 @@ function Profile(props) {
   const [emailError, setEmailError] = React.useState('');
   const [isFormValid, setIsFormValid] = React.useState(false);
 
-  console.log(isFormValid);
-
   function handleUserNameChange(e) {
     if (e.target.value.length < 2 || e.target.value.length > 30) {
       setIsNameError(true);

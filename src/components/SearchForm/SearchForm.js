@@ -43,7 +43,7 @@ function SearchForm(props) {
         <div className="search-form__switch">
           <input checked={isChecked} onChange={handleDurationFilter} className="search-form__input search-form__input_film-duration" id="filmDurationInput" type="checkbox"></input>
         </div>
-        <label className="search-form__label" for="filmDurationInput">Короткометражки</label>
+        <label className="search-form__label">Короткометражки</label>
       </div>
     </form>
   )

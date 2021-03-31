@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
+import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import { baseUrlForImages, noImagePic } from '../../utils/constants';
 import './MoviesCard.css';
 
