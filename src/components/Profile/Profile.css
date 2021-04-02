@@ -77,14 +77,17 @@
 }
 
 .profile__error {
+  margin: 0;
   font-size: 13px;
   font-weight: 500;
   line-height: 16px;
   color: #ff4062;
   text-align: center;
+  display: flex;
+  justify-content: center;
   position: absolute;
-  bottom: 30px;
-  left: 0;
+  bottom: 70px;
+  left: auto;
 }
 
 .profile__button {

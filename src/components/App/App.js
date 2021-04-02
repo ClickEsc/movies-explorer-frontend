@@ -17,6 +17,16 @@ import InfoToolTip from '../InfoToolTip/InfoToolTip';
 
 import tickMark from '../../images/tick-mark.svg';
 import crossMark from '../../images/cross-mark.svg';
+import {
+  SIGNUP_OK_MSG,
+  PROFILE_UPDATE_OK_MSG,
+  PROFILE_UPDATE_FAIL_MSG,
+  RES_ERROR_MSG,
+  INCORRECT_TOKEN_MSG,
+  NO_TOKEN_MSG,
+  SERVER_ERROR_MSG,
+  EMAIL_CONFLICT_MSG,
+  BAD_AUTH_DATA_MSG } from '../../utils/constants';
 import { moviesApi } from '../../utils/MoviesApi';
 import { mainApi } from '../../utils/MainApi';
 import './App.css';
@@ -47,23 +57,19 @@ function App() {
 
   
   // Хук для попапа информирования об успешности регистрации
-  const [infoTooltip, setInfoTooltip] = React.useState(undefined);
+  const [infoTooltip, setInfoTooltip] = React.useState({ src: '', text: ''});
   const [isInfoTooltipOpen, setInfoTooltipOpen] = React.useState(false);
-
-  function handleInfoTooltip() {
-    setInfoTooltipOpen(true);
-  }
   
-  function handleInfoTooltipContent(res) {
+  function handleInfoTooltipContent(res, message) {
     if (res) {
       setInfoTooltip({
         src: tickMark,
-        text: 'Вы успешно зарегистрировались!',
+        text: message,
       });
     } else {
       setInfoTooltip({
         src: crossMark,
-        text: 'Что-то пошло не так! Попробуйте ещё раз.',
+        text: RES_ERROR_MSG,
       });
     }
   }
@@ -107,12 +113,12 @@ function App() {
         })
         .catch((err) => {
           setIsError(true);
-          setError('При авторизации произошла ошибка. Переданный токен некорректен.');
+          setError(INCORRECT_TOKEN_MSG);
           console.log(`Ошибка при запросе токена: ${err.message}`)
         });  
     } else {
       setIsError(true);
-      setError('При авторизации произошла ошибка. Токен не передан или передан не в том формате.');
+      setError(NO_TOKEN_MSG);
     }
   }
 
@@ -133,21 +139,23 @@ function App() {
     mainApi.register(name, email, password)
       .then((res) => {
         if (res) {
-          handleInfoTooltipContent(res);
-          handleInfoTooltip();
+          setIsError(false);
+          setError('');
+          handleInfoTooltipContent(res, SIGNUP_OK_MSG);
+          setInfoTooltipOpen(true);
           history.push('/signin');
         } else {
           handleInfoTooltipContent(res);
-          handleInfoTooltip();
+          setInfoTooltipOpen(true);
         }
       })
       .catch((err) => {
         setIsError(true);
         console.log(`Ошибка при попытке регистрации пользователя: ${err.message}`);
         if (err.message.indexOf('500' !== -1)) {
-          setError('На сервере произошла ошибка.');
+          setError(SERVER_ERROR_MSG);
         } else if (err.message.indexOf('409' !== -1)) {
-          setError('Пользователь с таким email уже существует.');
+          setError(EMAIL_CONFLICT_MSG);
         }
       })
   }
@@ -157,6 +165,8 @@ function App() {
     mainApi.authorize(email, password)
       .then((res) => {
         if (res.token) {
+          setIsError(false);
+          setError('');
           setIsLoggedIn(true);
           handleLogIn();
           history.push('/movies');
@@ -166,9 +176,9 @@ function App() {
         setIsError(true);
         console.log(`Ошибка при попытке входа пользователя: ${err.message}`)
         if (err.message.indexOf('500' !== -1)) {
-          setError('На сервере произошла ошибка.');
+          setError(SERVER_ERROR_MSG);
         } else {
-          setError('Вы ввели неправильный логин или пароль.');
+          setError(BAD_AUTH_DATA_MSG);
         }
       });
   }
@@ -184,12 +194,26 @@ function App() {
     mainApi.editUserInfo(data)
       .then((res) => {
         if (res) {
+          setIsError(false);
+          setError('');
           setCurrentUser(res);
+          handleInfoTooltipContent(res, PROFILE_UPDATE_OK_MSG);
+          setInfoTooltipOpen(true);
         } else {
           setIsError(true);
+          handleInfoTooltipContent(res);
+          setInfoTooltipOpen(true);
         }
       })
-      .catch(err => console.log(`Ошибка при редактировании информации о пользователе: ${err.message}`))
+      .catch((err) => {
+        setIsError(true);
+        console.log(`Ошибка при редактировании информации о пользователе: ${err.message}`);
+        if (err.message.indexOf('500' !== -1)) {
+          setError(SERVER_ERROR_MSG);
+        } else {
+          setError(PROFILE_UPDATE_FAIL_MSG);
+        }
+      })
   }
 
  
@@ -327,7 +351,7 @@ function App() {
               movies={savedMovies}
               onSearch={searchSavedMovies}
               onDelete={deleteSavedMovie}
-              isLoading={false}
+              isLoading={isLoading}
               isMobile={isMobile}
               isSuperMobile={isSuperMobile}
             />
@@ -338,7 +362,8 @@ function App() {
               onProfileUpdate={updateUserInfo}
               onSignOut={signOut}
               isMobile={isMobile}
-              error={isError}
+              isError={isError}
+              error={error}
               isSuperMobile={isSuperMobile}
             />
             <Route path="/*">

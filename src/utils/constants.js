@@ -39,6 +39,32 @@ const noData = 'Нет данных';
 const noImagePic = 'https://www.webpsilon.com/wp-content/uploads/2018/02/Image_Not_Found_1x_qjofp8.png';
 const noVideoPic = 'https://i.ytimg.com/vi/3QtqXM5sdaY/maxresdefault.jpg';
 
+const SIGNUP_OK_MSG = 'Вы успешно зарегистрировались!';
+const PROFILE_UPDATE_OK_MSG = 'Данные профиля успешно обновлены';
+const PROFILE_UPDATE_FAIL_MSG = 'При обновлении профиля произошла ошибка'
+const RES_ERROR_MSG = 'Что-то пошло не так! Попробуйте ещё раз.';
+
+const INCORRECT_TOKEN_MSG = 'При авторизации произошла ошибка. Переданный токен некорректен.';
+const NO_TOKEN_MSG = 'При авторизации произошла ошибка. Токен не передан или передан не в том формате.';
+
+const SERVER_ERROR_MSG = 'На сервере произошла ошибка.';
+const EMAIL_CONFLICT_MSG = 'Пользователь с таким email уже существует.';
+const BAD_AUTH_DATA_MSG = 'Вы ввели неправильный логин или пароль.';
+
 module.exports = {
-  checkMyAge, thisYear, baseUrlForImages, noData, noImagePic, noVideoPic
+  checkMyAge,
+  thisYear,
+  baseUrlForImages,
+  noData,
+  noImagePic,
+  noVideoPic,
+  SIGNUP_OK_MSG,
+  PROFILE_UPDATE_OK_MSG,
+  PROFILE_UPDATE_FAIL_MSG,
+  RES_ERROR_MSG,
+  INCORRECT_TOKEN_MSG,
+  NO_TOKEN_MSG,
+  SERVER_ERROR_MSG,
+  EMAIL_CONFLICT_MSG,
+  BAD_AUTH_DATA_MSG
 }

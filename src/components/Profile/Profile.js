@@ -116,7 +116,7 @@ function Profile(props) {
           />
           {isEmailError && <span id="email-input-error" className="profile__input-error profile__input-error_email">{emailError}</span>}
         </div>
-        {props.error && <p className="profile__error">При обновлении профиля произошла ошибка</p>}
+        {props.isError && <p className="profile__error">{props.error}</p>}
         {isShownEditButton 
           && <button
           className="profile__button profile__button_edit"
