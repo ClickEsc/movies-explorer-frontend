@@ -10,6 +10,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: relative;
 }
 
 .search-form__wrap_film-duration {
@@ -32,6 +33,11 @@
 .search-form__search-button:hover {
   opacity: .8;
   cursor: pointer;
+}
+
+.search-form__search-button_disabled:hover {
+  opacity: 1;
+  cursor: default;
 }
 
 .search-form__switch {
@@ -104,6 +110,16 @@
 
 .search-form__input_film-duration:checked::before {
   left: 23px;
+}
+
+.search-form__input-error {
+  margin: 0;
+  position: absolute;
+  top: 60px;
+  left: 0;
+  color: #ff4062;
+  font-size: 10px;
+  line-height: 10px;
 }
 
 .search-form__label {

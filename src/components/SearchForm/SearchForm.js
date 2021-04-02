@@ -9,18 +9,32 @@ function SearchForm(props) {
 
   const [movieName, setMovieName] = React.useState('');
   const [isChecked, setIsChecked] = React.useState(false);
+  const [isValid, setIsValid] = React.useState(false);
+  const [isError, setIsError] = React.useState(false);
+  const [error, setError] = React.useState('');
 
   function handleMovieNameChange(e) {
+    isInputValid(e);
     setMovieName(e.target.value)
   };
 
-  function resetForm() {
-    setMovieName('');
+  function isInputValid(e) {
+    if (e.target.value.length === 0) {
+      setIsError(true);
+      setError('Введите запрос');
+      setIsValid(false);
+    } else {
+      setIsError(false);
+      setError('');
+      setIsValid(true);
+    }
   }
 
   function handleSubmit(e) {
-    e.preventDefault();
-    props.onSearch(movieName);
+    if (isValid) {
+      e.preventDefault();
+      props.onSearch(movieName);
+    }
   }
 
   function toggleCheckBox() {
@@ -48,13 +62,16 @@ function SearchForm(props) {
         setMovieName(savedMoviesQuery);
       }
     }
+    setIsError(false);
+    setError('');
   }, []);
 
   return (
     <form noValidate onSubmit={handleSubmit} className="search-form" name="search-form">
       <div className="search-form__wrap search-form__wrap_film-name">
-        <input value={movieName} onChange={handleMovieNameChange} className="search-form__input search-form__input_film-name" type="text" placeholder="Фильм"></input>
-        <button className="search-form__search-button" type="submit"></button>
+        <input value={movieName} minLength="1" onChange={handleMovieNameChange} className="search-form__input search-form__input_film-name" type="text" placeholder="Фильм"></input>
+        {isError && <span className="search-form__input-error">{error}</span>}
+        <button disabled={!isValid} className={`search-form__search-button ${!isValid && "search-form__search-button_disabled"}`} type="submit"></button>
       </div>
       <div className="search-form__wrap search-form__wrap_film-duration">
         <div className="search-form__switch">

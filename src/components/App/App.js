@@ -51,10 +51,7 @@ function App() {
   const [savedMovies, setSavedMovies] = React.useState([]);
   const [error, setError] = React.useState('');
   const [moviesSavedByUser, setMoviesSavedByUser] = React.useState([]);
-  const [isSavedByUser, setIsSavedByUser] = React.useState(false);
   const [isPopupMenuOpen, setPopupMenuOpen] = React.useState(false);
-  const [isHint, setIsHint] = React.useState(false);
-
   
   // Хук для попапа информирования об успешности регистрации
   const [infoTooltip, setInfoTooltip] = React.useState({ src: '', text: ''});
@@ -83,19 +80,22 @@ function App() {
     setInfoTooltipOpen(false);
   }
 
-  /*React.useEffect(() => {
-    const movies = savedMovies.find((item) => item.owner === currentUser._id);
-    setMoviesSavedByUser(movies);
-    console.log(moviesSavedByUser)
-  }, []);*/
-
-  
-    // Фильмы
+  // Фильмы
   React.useEffect(() => {
     moviesApi.getInitialMovies()
       .then((movies) => {
-        setInitialMovies(checkSavedMovies(movies, savedMovies));
+        localStorage.setItem('initialMovies', movies);
+        setInitialMovies(checkSavedMovies(movies, moviesSavedByUser));
       })
+      .catch((err) => {
+        console.log(`Ошибка при запросе фильмов: ${err.message}`)
+      });  
+  }, []);
+
+  // Сохранённые фильмы
+  React.useEffect(() => {
+    const ownMovies = savedMovies.filter((item) => item.owner === currentUser._id);
+    setMoviesSavedByUser(ownMovies);
   }, [savedMovies]);
   
   // Проверка токена и вход
@@ -134,7 +134,7 @@ function App() {
     }
     const searchSavedMoviesResult = JSON.parse(localStorage.getItem('searchSavedMoviesResult'));
     if (searchSavedMoviesResult) {
-      setMoviesFoundBySearch(searchSavedMoviesResult);
+      setMoviesSavedByUser(searchSavedMoviesResult);
     }
   }, []);
 
@@ -189,6 +189,7 @@ function App() {
 
   function signOut() {
     setIsLoggedIn(false);
+    localStorage.removeItem('initialMovies');
     localStorage.clear();
     history.push('/');
   }
@@ -245,7 +246,7 @@ function App() {
     const queryItems = query.toLowerCase().split(' ');
     const result = [];
     for (let i = 0; i < queryItems.length; i+=1) {
-      savedMovies.forEach((item) => {
+      moviesSavedByUser.forEach((item) => {
         if (item.nameRU.toLowerCase().includes(queryItems[i]) || item.nameEN.toLowerCase().includes(queryItems[i])) {
           result.push(item);
         }
@@ -253,41 +254,24 @@ function App() {
     }
     localStorage.setItem('savedMoviesQuery', JSON.stringify(query));
     localStorage.setItem('searchSavedMoviesResult', JSON.stringify(result));
-    setMoviesFoundBySearch(result);
+    setMoviesSavedByUser(result);
     setIsLoading(false);
   }
 
-  function checkSavedMovies(initialMovies, savedMovies) {
-    savedMovies.forEach((savedMovie) => {
+  function checkSavedMovies(initialMovies, array) {
+    array.forEach((savedMovie) => {
       initialMovies.find((item) => item.id === savedMovie.id).isSavedByUser = true;
       initialMovies.find((item) => item.id === savedMovie.id)._id = savedMovie._id;
     });
     return initialMovies;
   }
 
-  /*React.useEffect(() => {
-    savedMovies.forEach((item) => {
-      if (item.owner === currentUser._id) {
-        setMoviesSavedByUser([item, ...moviesSavedByUser]);
-      }
-      console.log(savedMovies);
-      console.log(moviesSavedByUser);
-    })
-  }, [savedMovies])*/
-
-  /*React.useEffect(() => {
-    const result = localStorage.getItem('searchMovieResult');
-    if (result) {
-      setMoviesFoundBySearch(result);
-    }
-  }, []);*/
-
   // Добавление фильмов в сохраненные
   function addSavedMovie(movie) {
-    if (!savedMovies.find((item) => item.id === movie.id)) {
+    if (!moviesSavedByUser.find((item) => item.id === movie.id)) {
       mainApi.addSavedMovie(movie)
         .then((newSavedMovie) => {
-        setSavedMovies([newSavedMovie, ...savedMovies]);
+          setMoviesSavedByUser([...moviesSavedByUser, newSavedMovie]);
       })
       .catch(err => console.log(`Ошибка при добавлении фильма в сохраненные: ${err.message}`))
     }
@@ -298,10 +282,10 @@ function App() {
     mainApi.deleteSavedMovie(movie)
       .then(() => {
         if (!movie._id) {
-          movie._id = savedMovies.find((item) => item.id === movie.id);
+          movie._id = moviesSavedByUser.find((item) => item.id === movie.id);
         }
-        const newMovieCards = savedMovies.filter((c) => c._id !== movie._id);
-        setSavedMovies(newMovieCards);
+        const newMovieCards = moviesSavedByUser.filter((c) => c._id !== movie._id);
+        setMoviesSavedByUser(newMovieCards);
       })
       .catch(err => console.log(`Ошибка при удалении фильма из сохраненных: ${err.message}`))
   }
@@ -355,7 +339,7 @@ function App() {
               path="/saved-movies"
               loggedIn={isLoggedIn}
               component={SavedMovies}
-              movies={savedMovies}
+              movies={moviesSavedByUser}
               onSearch={searchSavedMovies}
               onDelete={deleteSavedMovie}
               isLoading={isLoading}

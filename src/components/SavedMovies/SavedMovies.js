@@ -21,7 +21,6 @@ function SavedMovies(props) {
 
   React.useEffect(() => {
     setMoviesToShow(props.movies);
-    console.log(moviesToShow.length)
   }, [props.movies]);
 
   return (

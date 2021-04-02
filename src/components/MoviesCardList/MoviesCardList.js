@@ -32,13 +32,17 @@ function MoviesCardList(props) {
   ));
 
   function handleMoviesCount() {
-    if (!props.isMobile) {
-      setMoviesCount(MOVIES_COUNT_DESKTOP);
-    } else if (props.isSuperMobile) {
-      setMoviesCount(MOVIES_COUNT_MOBILE);
-    } else if (props.isMobile && !props.isSuperMobile) {
-      setMoviesCount(MOVIES_COUNT_SUPER_MOBILE);
-    } 
+    if (path === "/movies") {
+      if (!props.isMobile) {
+        setMoviesCount(MOVIES_COUNT_DESKTOP);
+      } else if (props.isSuperMobile) {
+        setMoviesCount(MOVIES_COUNT_MOBILE);
+      } else if (props.isMobile && !props.isSuperMobile) {
+        setMoviesCount(MOVIES_COUNT_SUPER_MOBILE);
+      }
+    } else {
+      setMoviesCount(props.movies.length);
+    }
   }
 
   function loadMore() {

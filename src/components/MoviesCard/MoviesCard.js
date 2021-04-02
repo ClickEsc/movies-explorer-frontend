@@ -1,6 +1,5 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
-import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import { baseUrlForImages, noImagePic } from '../../utils/constants';
 import './MoviesCard.css';
 
@@ -10,7 +9,6 @@ function MoviesCard(props) {
   const path = location.pathname;
 
   const [isShown, setIsShown] = React.useState(false);
-  const [isSaved, setIsSaved] = React.useState(false);
 
   function getImageUrl() {
     if (props.movie.image === null || props.movie.image === undefined) {
@@ -41,13 +39,11 @@ function MoviesCard(props) {
 
   function saveMovie() {
     props.onSave(props.movie);
-    setIsSaved(true);
     props.movie.isSavedByUser = true;
   }
 
   function deleteMovie() {
     props.onDelete(props.movie);
-    setIsSaved(false);
     props.movie.isSavedByUser = false;
   }
 
