@@ -51,6 +51,17 @@ const SERVER_ERROR_MSG = 'На сервере произошла ошибка.';
 const EMAIL_CONFLICT_MSG = 'Пользователь с таким email уже существует.';
 const BAD_AUTH_DATA_MSG = 'Вы ввели неправильный логин или пароль.';
 
+const MOVIES_ERROR_MSG = 'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз';
+
+const SHORT_MOVIE_CAP_DURATION = 40;
+const MOVIES_COUNT_DESKTOP = 12;
+const MOVIES_COUNT_MOBILE = 8;
+const MOVIES_COUNT_SUPER_MOBILE = 5;
+
+const MOVIES_NUMBER_TO_ADD_DESKTOP = 3;
+const MOVIES_NUMBER_TO_ADD_MOBILE = 2;
+
+
 module.exports = {
   checkMyAge,
   thisYear,
@@ -66,5 +77,12 @@ module.exports = {
   NO_TOKEN_MSG,
   SERVER_ERROR_MSG,
   EMAIL_CONFLICT_MSG,
-  BAD_AUTH_DATA_MSG
+  BAD_AUTH_DATA_MSG,
+  MOVIES_ERROR_MSG,
+  SHORT_MOVIE_CAP_DURATION,
+  MOVIES_COUNT_DESKTOP,
+  MOVIES_COUNT_MOBILE,
+  MOVIES_COUNT_SUPER_MOBILE,
+  MOVIES_NUMBER_TO_ADD_DESKTOP,
+  MOVIES_NUMBER_TO_ADD_MOBILE
 }

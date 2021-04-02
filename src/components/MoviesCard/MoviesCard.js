@@ -13,12 +13,14 @@ function MoviesCard(props) {
   const [isSaved, setIsSaved] = React.useState(false);
 
   function getImageUrl() {
-    if (props.movie.image !== null || props.movie.image !== undefined) {
+    if (props.movie.image === null || props.movie.image === undefined) {
+      return noImagePic
+    } else {
       if (path === '/movies') {
         return baseUrlForImages + props.movie.image.url
-      } else return props.movie.image
-    } else {
-      return noImagePic
+      } else {
+        return props.movie.image
+      }
     }
   }
 

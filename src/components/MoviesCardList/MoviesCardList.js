@@ -1,6 +1,13 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import MoviesCard from '../MoviesCard/MoviesCard';
+import {
+  MOVIES_ERROR_MSG,
+  MOVIES_COUNT_DESKTOP,
+  MOVIES_COUNT_MOBILE,
+  MOVIES_COUNT_SUPER_MOBILE,
+  MOVIES_NUMBER_TO_ADD_DESKTOP,
+  MOVIES_NUMBER_TO_ADD_MOBILE } from '../../utils/constants';
 import './MoviesCardList.css';
 
 function MoviesCardList(props) {
@@ -26,33 +33,30 @@ function MoviesCardList(props) {
 
   function handleMoviesCount() {
     if (!props.isMobile) {
-      setMoviesCount(12);
+      setMoviesCount(MOVIES_COUNT_DESKTOP);
     } else if (props.isSuperMobile) {
-      setMoviesCount(5);
+      setMoviesCount(MOVIES_COUNT_MOBILE);
     } else if (props.isMobile && !props.isSuperMobile) {
-      setMoviesCount(8);
+      setMoviesCount(MOVIES_COUNT_SUPER_MOBILE);
     } 
   }
 
   function loadMore() {
     if (!props.isMobile) {
-      setMoviesCount(moviesCount + 3);
-    } else if (props.isSuperMobile) {
-      setMoviesCount(moviesCount + 2);
-    } else if (props.isMobile && !props.isSuperMobile) {
-      setMoviesCount(moviesCount + 2);
-    } 
+      setMoviesCount(moviesCount + MOVIES_NUMBER_TO_ADD_DESKTOP);
+    } else {
+      setMoviesCount(moviesCount + MOVIES_NUMBER_TO_ADD_MOBILE);
+    }
   }
 
   function showHint() {
     if (path === "/movies") {
-      return 'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз'
+      return MOVIES_ERROR_MSG
     }
   }
 
   React.useEffect(() => {
     handleMoviesCount();
-    console.log(props.movies.length);
   }, [size]);
 
   return (

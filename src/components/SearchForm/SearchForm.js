@@ -1,7 +1,11 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import './SearchForm.css';
 
 function SearchForm(props) {
+
+  const location = useLocation();
+  const path = location.pathname;
 
   const [movieName, setMovieName] = React.useState('');
   const [isChecked, setIsChecked] = React.useState(false);
@@ -17,7 +21,6 @@ function SearchForm(props) {
   function handleSubmit(e) {
     e.preventDefault();
     props.onSearch(movieName);
-    resetForm();
   }
 
   function toggleCheckBox() {
@@ -33,6 +36,20 @@ function SearchForm(props) {
     props.onDurationFilter(isChecked);
   }, [isChecked]);
 
+  React.useEffect(() => {
+    if (path === "/movies") {
+      const moviesQuery = JSON.parse(localStorage.getItem('moviesQuery'));
+      if (moviesQuery) {
+        setMovieName(moviesQuery);
+      }
+    } else {
+      const savedMoviesQuery = JSON.parse(localStorage.getItem('savedMoviesQuery'));
+      if (savedMoviesQuery) {
+        setMovieName(savedMoviesQuery);
+      }
+    }
+  }, []);
+
   return (
     <form noValidate onSubmit={handleSubmit} className="search-form" name="search-form">
       <div className="search-form__wrap search-form__wrap_film-name">
@@ -41,7 +58,7 @@ function SearchForm(props) {
       </div>
       <div className="search-form__wrap search-form__wrap_film-duration">
         <div className="search-form__switch">
-          <input checked={isChecked} onChange={handleDurationFilter} className="search-form__input search-form__input_film-duration" id="filmDurationInput" type="checkbox"></input>
+          <input disabled={!props.isCheckBoxActive} checked={isChecked} onChange={handleDurationFilter} className="search-form__input search-form__input_film-duration" id="filmDurationInput" type="checkbox"></input>
         </div>
         <label className="search-form__label">Короткометражки</label>
       </div>

@@ -128,10 +128,14 @@ function App() {
     if (token) {
       handleLogIn();
     }
-    /*const searchResult = localStorage.getItem.JSON.parse('searchMovieResult');
-    if (searchResult) {
-
-    }*/
+    const searchMoviesResult = JSON.parse(localStorage.getItem('searchMoviesResult'));
+    if (searchMoviesResult) {
+      setMoviesFoundBySearch(searchMoviesResult);
+    }
+    const searchSavedMoviesResult = JSON.parse(localStorage.getItem('searchSavedMoviesResult'));
+    if (searchSavedMoviesResult) {
+      setMoviesFoundBySearch(searchSavedMoviesResult);
+    }
   }, []);
 
   // Регистрация пользователя
@@ -224,12 +228,13 @@ function App() {
     const result = [];
     for (let i = 0; i < queryItems.length; i+=1) {
       initialMovies.forEach((item) => {
-        if (item.nameRU.toLowerCase().indexOf(" " + queryItems[i] + " " || queryItems[i] + " " || " " + queryItems[i]) !== -1) {
+        if ((item.nameRU !== null && item.nameRU.toLowerCase().indexOf(queryItems[i]) !== -1) || (item.nameEN !== null && item.nameEN.toLowerCase().indexOf(queryItems[i]) !== -1)) {
           result.push(item);
         }
       })
     }
-    localStorage.setItem('searchMovieResult', JSON.stringify(result));
+    localStorage.setItem('moviesQuery', JSON.stringify(query));
+    localStorage.setItem('searchMoviesResult', JSON.stringify(result));
     setMoviesFoundBySearch(result);
     setIsLoading(false);
   }
@@ -241,11 +246,13 @@ function App() {
     const result = [];
     for (let i = 0; i < queryItems.length; i+=1) {
       savedMovies.forEach((item) => {
-        if (item.nameRU.toLowerCase().indexOf(" " + queryItems[i] + " " || queryItems[i] + " " || " " + queryItems[i]) !== -1) {
+        if (item.nameRU.toLowerCase().includes(queryItems[i]) || item.nameEN.toLowerCase().includes(queryItems[i])) {
           result.push(item);
         }
       })
     }
+    localStorage.setItem('savedMoviesQuery', JSON.stringify(query));
+    localStorage.setItem('searchSavedMoviesResult', JSON.stringify(result));
     setMoviesFoundBySearch(result);
     setIsLoading(false);
   }

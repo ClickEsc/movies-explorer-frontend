@@ -2,16 +2,17 @@ import React from 'react';
 import SearchForm from '../SearchForm/SearchForm';
 import Preloader from '../Preloader/Preloader';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
+import { SHORT_MOVIE_CAP_DURATION } from '../../utils/constants';
 import './Movies.css';
 
 function Movies(props) {
    
   const [moviesToShow, setMoviesToShow] = React.useState(props.movies);
   const [isHint, setIsHint] = React.useState(false);
+  const movies = props.movies.filter((item) => item.duration <= SHORT_MOVIE_CAP_DURATION);
 
   function filterMoviesByDuration(isChecked) {
     if (isChecked) {
-      const movies = props.movies.filter((item) => item.duration <= 40);
       setMoviesToShow(movies);
     } else {
       setMoviesToShow(props.movies);
@@ -31,7 +32,7 @@ function Movies(props) {
 
   return (
     <section className="movies">
-      <SearchForm onSearch={props.onSearch} onDurationFilter={filterMoviesByDuration} />
+      <SearchForm movies={moviesToShow} onSearch={props.onSearch} isCheckBoxActive={moviesToShow.length === 0 || movies.length === 0 ? false : true} onDurationFilter={filterMoviesByDuration} />
       {props.isLoading && <Preloader />}
       {props.movies
         && <MoviesCardList movies={moviesToShow} onSave={props.onSave} onDelete={props.onDelete} isMobile={props.isMobile} isSuperMobile={props.isSuperMobile} />
