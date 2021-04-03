@@ -36,7 +36,7 @@ class MainApi {
         description: movie.description ? movie.description : noData,
         image: movie.image ? baseUrlForImages + movie.image.url : noImagePic,
         trailerLink: movie.trailerLink ? movie.trailerLink : noVideoPic,
-        thumbnail: movie.image.formats.thumbnail ? baseUrlForImages + movie.image.formats.thumbnail.url : noImagePic,
+        thumbnail: movie.image && movie.image.formats.thumbnail ? baseUrlForImages + movie.image.formats.thumbnail.url : noImagePic,
         nameRU: movie.nameRU ? movie.nameRU : noData,
         nameEN: movie.nameEN ? movie.nameEN : noData,
         id: movie.id

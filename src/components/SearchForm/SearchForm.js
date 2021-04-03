@@ -51,6 +51,12 @@ function SearchForm(props) {
   }, [isChecked]);
 
   React.useEffect(() => {
+    if (movieName.length > 0) {
+      setIsValid(true);
+    }
+  }, []);
+
+  React.useEffect(() => {
     if (path === "/movies") {
       const moviesQuery = JSON.parse(localStorage.getItem('moviesQuery'));
       if (moviesQuery) {
@@ -60,6 +66,7 @@ function SearchForm(props) {
       const savedMoviesQuery = JSON.parse(localStorage.getItem('savedMoviesQuery'));
       if (savedMoviesQuery) {
         setMovieName(savedMoviesQuery);
+        setIsValid(true);
       }
     }
     setIsError(false);
@@ -69,13 +76,34 @@ function SearchForm(props) {
   return (
     <form noValidate onSubmit={handleSubmit} className="search-form" name="search-form">
       <div className="search-form__wrap search-form__wrap_film-name">
-        <input value={movieName} minLength="1" onChange={handleMovieNameChange} className="search-form__input search-form__input_film-name" type="text" placeholder="Фильм"></input>
+        <input
+          value={movieName}
+          minLength="1"
+          onChange={handleMovieNameChange}
+          className="search-form__input search-form__input_film-name"
+          type="text"
+          placeholder="Фильм">
+        </input>
         {isError && <span className="search-form__input-error">{error}</span>}
-        <button disabled={!isValid} className={`search-form__search-button ${!isValid && "search-form__search-button_disabled"}`} type="submit"></button>
+        <button
+          disabled={!isValid}
+          className={`search-form__search-button ${!isValid && "search-form__search-button_disabled"}`}
+          type="submit">
+        </button>
       </div>
       <div className="search-form__wrap search-form__wrap_film-duration">
         <div className="search-form__switch">
-          <input disabled={!props.isCheckBoxActive} checked={isChecked} onChange={handleDurationFilter} className="search-form__input search-form__input_film-duration" id="filmDurationInput" type="checkbox"></input>
+          <input
+            disabled={!props.isCheckBoxActive}
+            checked={isChecked}
+            onChange={handleDurationFilter}
+            className={`search-form__input
+              search-form__input_film-duration
+              ${!props.isCheckBoxActive && "search-form__input_film-duration_disabled"}`
+            }
+            id="filmDurationInput"
+            type="checkbox">
+          </input>
         </div>
         <label className="search-form__label">Короткометражки</label>
       </div>

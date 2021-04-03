@@ -50,6 +50,7 @@ function App() {
   const [moviesFoundBySearch, setMoviesFoundBySearch] = React.useState([]);
   const [savedMovies, setSavedMovies] = React.useState([]);
   const [error, setError] = React.useState('');
+  const [isSavedMoviesError, setIsSavedMoviesError] = React.useState(false);
   const [moviesSavedByUser, setMoviesSavedByUser] = React.useState([]);
   const [isPopupMenuOpen, setPopupMenuOpen] = React.useState(false);
   
@@ -247,7 +248,7 @@ function App() {
     const result = [];
     for (let i = 0; i < queryItems.length; i+=1) {
       moviesSavedByUser.forEach((item) => {
-        if (item.nameRU.toLowerCase().includes(queryItems[i]) || item.nameEN.toLowerCase().includes(queryItems[i])) {
+        if ((item.nameRU.toLowerCase().indexOf(queryItems[i]) !== -1) || (item.nameEN.toLowerCase().indexOf(queryItems[i]) !== -1)) {
           result.push(item);
         }
       })
@@ -255,6 +256,9 @@ function App() {
     localStorage.setItem('savedMoviesQuery', JSON.stringify(query));
     localStorage.setItem('searchSavedMoviesResult', JSON.stringify(result));
     setMoviesSavedByUser(result);
+    if (query.length > 0 && result.length === 0) {
+      setIsSavedMoviesError(true);
+    }
     setIsLoading(false);
   }
 
@@ -334,6 +338,7 @@ function App() {
               onSearch={searchSavedMovies}
               onDelete={deleteSavedMovie}
               isLoading={isLoading}
+              isError={isSavedMoviesError}
               isMobile={isMobile}
               isSuperMobile={isSuperMobile}
             />

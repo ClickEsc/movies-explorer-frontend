@@ -20,8 +20,8 @@ function SavedMovies(props) {
   }
 
   React.useEffect(() => {
-    setMoviesToShow(moviesToShow);
-  }, [moviesToShow]);
+    setMoviesToShow(props.movies);
+  }, [props.movies]);
 
   return (
     <section className="saved-movies">
@@ -30,7 +30,8 @@ function SavedMovies(props) {
         ? <Preloader />
         : <MoviesCardList movies={moviesToShow} onDelete={props.onDelete} isMobile={props.isMobile} isSuperMobile={props.isSuperMobile} />
       }
-      {props.movies.length === 0 && <p className="saved-movies__hint">У Вас пока нет сохранённых фильмов</p>}
+      {props.movies.length === 0 && !props.isError && <p className="saved-movies__hint">У Вас пока нет сохранённых фильмов</p>}
+      {props.isError && <p className="saved-movies__hint">По введённому ключевому слову сохранённых фильмов не найдено</p>}
     </section>
   )
 };

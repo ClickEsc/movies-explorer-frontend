@@ -91,6 +91,11 @@
   transition: .5s;
 }
 
+.search-form__input_film-duration_disabled:hover {
+  opacity: 1;
+  cursor: default;
+}
+
 .search-form__input_film-duration:checked {
   background-color: #2be080;
 }
@@ -102,14 +107,14 @@
   background-color: #fff;
   border-radius: 20px;
   position: absolute;
-  top: 3px;
-  left: 2px;
+  top: 2.8px;
+  left: 2.5px;
   transition: .5s;
   transform: scale(1.1);
 }
 
 .search-form__input_film-duration:checked::before {
-  left: 23px;
+  left: 22px;
 }
 
 .search-form__input-error {
