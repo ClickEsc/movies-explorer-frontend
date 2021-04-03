@@ -78,7 +78,7 @@ function Profile(props) {
 
   React.useEffect(() => {
     handleValid();
-  }, [isNameError, isEmailError]);
+  }, [isNameError, isEmailError, userName, userEmail]);
 
   React.useEffect(() => {
     setIsFormValid(false);
