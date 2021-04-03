@@ -125,7 +125,7 @@ class MainApi {
 }
 
 export const mainApi = new MainApi({
-  baseUrl: 'https://api.skubilina.students.nomoreparties.space',
+  baseUrl: 'https://api.diploma.skubilina.students.nomoredomains.icu',
   headers: {
     "Content-Type": "application/json",
     "Authorization": `Bearer ${localStorage.getItem('token')}`
