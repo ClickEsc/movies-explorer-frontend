@@ -28,7 +28,7 @@ function MoviesCardList(props) {
   }, []);
   
   const renderedMovies = props.movies.slice(0, moviesCount).map((item) => (
-    <MoviesCard key={item.id} movie={item} onSave={props.onSave} onDelete={props.onDelete}/>
+    <MoviesCard key={item.id} movie={item} isSaved={path === "/movies" ? props.savedMovies.find(i => i.id === item.id) : false} onSave={props.onSave} onDelete={props.onDelete}/>
   ));
 
   function handleMoviesCount() {

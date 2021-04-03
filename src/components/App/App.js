@@ -85,7 +85,7 @@ function App() {
     moviesApi.getInitialMovies()
       .then((movies) => {
         localStorage.setItem('initialMovies', movies);
-        setInitialMovies(checkSavedMovies(movies, moviesSavedByUser));
+        setInitialMovies(movies);
       })
       .catch((err) => {
         console.log(`Ошибка при запросе фильмов: ${err.message}`)
@@ -258,14 +258,6 @@ function App() {
     setIsLoading(false);
   }
 
-  function checkSavedMovies(initialMovies, array) {
-    array.forEach((savedMovie) => {
-      initialMovies.find((item) => item.id === savedMovie.id).isSavedByUser = true;
-      initialMovies.find((item) => item.id === savedMovie.id)._id = savedMovie._id;
-    });
-    return initialMovies;
-  }
-
   // Добавление фильмов в сохраненные
   function addSavedMovie(movie) {
     if (!moviesSavedByUser.find((item) => item.id === movie.id)) {
@@ -279,12 +271,10 @@ function App() {
 
   // Удаление фильма из сохраненных
   function deleteSavedMovie(movie) {
-    mainApi.deleteSavedMovie(movie)
+    const savedMovie = moviesSavedByUser.find((item) => item.id === movie.id);
+    mainApi.deleteSavedMovie({ _id: savedMovie._id })
       .then(() => {
-        if (!movie._id) {
-          movie._id = moviesSavedByUser.find((item) => item.id === movie.id);
-        }
-        const newMovieCards = moviesSavedByUser.filter((c) => c._id !== movie._id);
+        const newMovieCards = moviesSavedByUser.filter((c) => c._id !== savedMovie._id);
         setMoviesSavedByUser(newMovieCards);
       })
       .catch(err => console.log(`Ошибка при удалении фильма из сохраненных: ${err.message}`))
@@ -328,6 +318,7 @@ function App() {
               loggedIn={isLoggedIn}
               component={Movies}
               movies={moviesFoundBySearch}
+              savedMovies={moviesSavedByUser}
               onSearch={searchInitialMovies}
               onSave={addSavedMovie}
               onDelete={deleteSavedMovie}

@@ -20,8 +20,8 @@ function SavedMovies(props) {
   }
 
   React.useEffect(() => {
-    setMoviesToShow(props.movies);
-  }, [props.movies]);
+    setMoviesToShow(moviesToShow);
+  }, [moviesToShow]);
 
   return (
     <section className="saved-movies">

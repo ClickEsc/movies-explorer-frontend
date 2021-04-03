@@ -35,7 +35,7 @@ function Movies(props) {
       <SearchForm movies={moviesToShow} onSearch={props.onSearch} isCheckBoxActive={moviesToShow.length === 0 || movies.length === 0 ? false : true} onDurationFilter={filterMoviesByDuration} />
       {props.isLoading && <Preloader />}
       {props.movies
-        && <MoviesCardList movies={moviesToShow} onSave={props.onSave} onDelete={props.onDelete} isMobile={props.isMobile} isSuperMobile={props.isSuperMobile} />
+        && <MoviesCardList movies={moviesToShow} savedMovies={props.savedMovies} onSave={props.onSave} onDelete={props.onDelete} isMobile={props.isMobile} isSuperMobile={props.isSuperMobile} />
       }
       {isHint && <p className="movies__hint">Ничего не найдено</p>}
     </section>
