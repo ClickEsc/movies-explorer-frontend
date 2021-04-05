@@ -8,7 +8,7 @@
 }
 
 .auth__form {
-  min-height: 650px;
+  min-height: 550px;
   height: 74.5vh;
   display: flex;
   flex-direction: column;
@@ -66,22 +66,25 @@
 
 .auth__input_password {
   letter-spacing: .03em;
-  color: #ff4062;
 }
 
 .auth__error-text {
-  display: none;
   margin: 0;
   position: absolute;
-  top: 79px;
+  top: 72px;
   left: 0;
   color: #ff4062;
   font-size: 10px;
-  line-height: 12px;
+  line-height: 10px;
 }
 
-.auth__error-text_visible {
-  display: block;
+.auth__error {
+  margin: 0 auto 20px;
+  max-width: 380px;
+  font-size: 11px;
+  line-height: 13px;
+  color: #ff4062;
+  text-align: center;
 }
 
 .auth__save {
@@ -99,6 +102,16 @@
 .auth__save:hover {
   opacity: .8;
   cursor: pointer;
+}
+
+.auth__save_disabled {
+  color: #c2c2c2;
+  background-color: #f8f8f8;
+}
+
+.auth__save_disabled:hover {
+  opacity: 1;
+  cursor: default;
 }
 
 @media screen and (max-width: 850px) {

@@ -1,13 +1,13 @@
 .navigation {
-  width: 100%;
+  margin: 5px 0 0 62px;
   background-color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.navigation__container {
-  margin: 0 0 0 58px;
+.navigation_landing {
+  background-color: #f3c1f8;
 }
 
 .navigation__link {

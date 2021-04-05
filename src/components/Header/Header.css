@@ -99,6 +99,11 @@
   padding-top: 4px;
 }
 
+.header__menu-icon:hover {
+  opacity: .8;
+  cursor: pointer;
+}
+
 @media screen and (max-width: 500px) {
   .header {
     padding: 18px 16px 18px 14px;
@@ -123,7 +128,14 @@
     padding: 7px 13px 7px 12px;
   }
 
+  .header__container {
+    margin: 0;
+    padding: 0;
+  }
+
   .header__menu-icon {
+    margin: 0;
+    padding: 0;
     width: 34px;
     height: 38px;
   }

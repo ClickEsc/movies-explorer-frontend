@@ -1,76 +1,79 @@
-import { Route, Link } from 'react-router-dom';
+import React from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import logo from "../../images/header__logo.svg";
 import menu from "../../images/mobile-menu-icon.svg"
-import { pathname } from '../../utils/constants';
 import Navigation from '../Navigation/Navigation';
 import AccountLink from '../AccountLink/AccountLink';
 import './Header.css';
 
 function Header(props) {
 
-    function setHeaderStyle() {
-      if (pathname === "/") {
-        return {paddingBottom: "25px", backgroundColor: "#f3c1f8"}
-      } else if ((pathname === "/signin" || pathname === "/signup")) {
-        if (props.isSuperMobile) {
-          return {padding: "56px 0 6px", backgroundColor: "#fff", textAlign: "center"}
-        } else {
-          return {padding: "56px 0 6px", backgroundColor: "#fff", justifyContent: "flex-start"}
-        }
+  const location = useLocation();
+  const path = location.pathname;
+
+  const [headerStyle, setHeaderStyle] = React.useState();
+  const [headerLinkStyle, setHeaderLinkStyle] = React.useState();
+  const [size, setSize] = React.useState([0, 0]);
+
+  React.useLayoutEffect(() => {
+    function updateSize() {
+      setSize([window.innerWidth, window.innerHeight]);
+    }
+    window.addEventListener('resize', updateSize);
+    updateSize();
+    return () => window.removeEventListener('resize', updateSize);
+  }, []);
+
+  function toggleHeaderStyle() {
+    if (path === "/") {
+      setHeaderStyle({paddingBottom: "25px", backgroundColor: "#f3c1f8"})
+    } else if (path === "/signin" || path === "/signup") {
+      if (props.isSuperMobile) {
+        setHeaderStyle({padding: "56px 0 6px", backgroundColor: "#fff", textAlign: "center"})
       } else {
-        return {paddingBottom: "18px", backgroundColor: "#fff"}
+        setHeaderStyle({padding: "56px 0 6px", backgroundColor: "#fff", justifyContent: "flex-start"})
+      }
+    } else {
+      setHeaderStyle({paddingBottom: "18px", backgroundColor: "#fff"})
+    }
+  }
+
+  function toggleHeaderLinkStyle() {
+    if ((path === "/signin" || path === "/signup")) {
+      setHeaderLinkStyle({width: "396px", margin: "0 auto"})
+    } else if ((path === "/signin" || path === "/signup") && (props.isSuperMobile)) {
+      setHeaderLinkStyle({width: "300px", margin: "0 auto", textAlign: "center"})
+    } else {
+      if (path !== "/") {
+        setHeaderLinkStyle({width: "max-content"})
       }
     }
+  }
 
-    function setHeaderLinkStyle() {
-      if ((pathname === "/signin" || pathname === "/signup")) {
-        return {width: "396px", margin: "0 auto"}
-      } else if ((pathname === "/signin" || pathname === "/signup") && (props.isSuperMobile)) {
-        return {width: "300px", margin: "0 auto", textAlign: "center"}
-      } else {
-        if (pathname !== "/") {
-          return {width: "max-content"}
-        }
-      }
-    }
+  React.useEffect(() => {
+    toggleHeaderStyle();
+    toggleHeaderLinkStyle();
+  }, [location, size]);
 
-    return (
-      <header className="header" style={setHeaderStyle()}>
-        <Link to="/" className="header__link header__link_landing" style={setHeaderLinkStyle()}>
-            <img className="header__logo" src={logo} alt="Стилизованный логотип сервиса обзора фильмов 'Movies Explorer'" />
-        </Link>
-        <Route exact path="/">
-          <div className="header__container">
+  return (
+    <header className="header" style={headerStyle}>
+      <Link to="/" className="header__link header__link_landing" style={headerLinkStyle}>
+        <img className="header__logo" src={logo} alt="Стилизованный логотип сервиса обзора фильмов 'Movies Explorer'" />
+      </Link>
+      {props.loggedIn && !props.isSuperMobile && <Navigation />}
+      <div className="header__container">
+        {props.loggedIn
+          && (!props.isMobile 
+            ? <AccountLink /> : <img onClick={props.onMenuClick} className="header__menu-icon" src={menu} alt="Стилизованная иконка меню" />)}
+        {path === "/" && !props.loggedIn &&
+          <>
             <Link to="/signup" className="header__link header__link_signup">Регистрация</Link>
             <Link to="/signin" className="header__link header__link_signin">Войти</Link>
-          </div>
-        </Route>
-        <Route path="/movies">
-          {!props.isMobile &&
-            <Navigation />
-          }
-          { !props.isMobile
-            ? <AccountLink />
-            : <img onClick={props.onMenuClick} className="header__menu-icon" src={menu} alt="Стилизованная иконка меню" />}
-        </Route>
-        <Route path="/saved-movies">
-          {!props.isMobile &&
-            <Navigation />
-          }
-          { !props.isMobile
-            ? <AccountLink />
-            : <img onClick={props.onMenuClick} className="header__menu-icon" src={menu} alt="Стилизованная иконка меню" />}
-        </Route>
-        <Route path="/profile">
-          {!props.isMobile &&
-            <Navigation />
-          }
-          { !props.isMobile
-            ? <AccountLink />
-            : <img onClick={props.onMenuClick} className="header__menu-icon" src={menu} alt="Стилизованная иконка меню" />}
-        </Route>
-      </header>
-    );
-  }
-  
-  export default Header;
+          </>
+        }
+      </div>
+    </header>
+  );
+}
+
+export default Header;
